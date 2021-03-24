@@ -1,6 +1,6 @@
 # Data-Purifier
 
-## An Automated Data Cleaning Library For Python
+## An Automated Data Cleaning and and Preprocessing Library For Python
 
 ## TODO
 
@@ -10,3 +10,5 @@
 - [ ] Python package via pip
 - [ ] Python Package
 - [ ] Python Package
+
+Python Package: https://pypi.org/project/datapurifier/
