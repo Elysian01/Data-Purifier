@@ -1,1 +1,10 @@
-dataset
+## Directories
+datasets
+datapurifier.egg-info
+dist
+
+
+## TEMP Files
+__pycache__
+.vscode
+.ipynb_checkpoints
