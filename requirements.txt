@@ -13,5 +13,6 @@ pytz==2021.1
 scipy==1.6.1
 seaborn==0.11.1
 six==1.15.0
+termcolor==1.1.0
 toml @ file:///tmp/build/80754af9/toml_1616166611790/work
 wincertstore==0.2

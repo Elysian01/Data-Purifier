@@ -7,8 +7,7 @@
 - [ ] Implementation of functions and class of various data cleaning Techniques
 - [ ] Landing and documentation website
 - [ ] Automate the data cleaning process
-- [ ] Python package via pip
-- [ ] Python Package
-- [ ] Python Package
+- [x] Python package via pip
+
 
 Python Package: https://pypi.org/project/datapurifier/
