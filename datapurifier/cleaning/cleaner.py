@@ -1,16 +1,8 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 
-class Purify:
-    def __init__(self, df):
-        self.__set_df(df)
-
-    def __set_df(self, df):
-        self.df = df
-
+class AutoCleaner:
     def drop_null_col(self, df, threshold):
         '''
         Drop columns below having null values below certain threshold,
@@ -21,5 +13,5 @@ class Purify:
         raise Exception("Threshold should be between 0 and 1")
 
 
-if __name__ == "__main__":
-    pass
+if __name__ == '__main__':
+    ac = AutoCleaner()

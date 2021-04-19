@@ -5,21 +5,22 @@ with open('requirements.txt') as f:
 
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'Operating System :: Microsoft :: Windows :: Windows 10',
     'License :: OSI Approved :: MIT License',
-    'Programming Language :: Python :: 3.8'
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.7'
 ]
 
-setup(name="datapurifier",
-      version="0.0.1",
-      description="Python library for automated Data Cleaning and Preprocessing",
+setup(name="data-purifier",
+      version="0.0.2",
+      description="A Python library for Automated Exploratory Data Analysis, Automated Data Cleaning and Automated Data Preprocessing For Machine Learning and Natural Language Processing in Python.",
       url="",
       long_description=open("PYPI_README.md", encoding='utf-8').read(),
       long_description_content_type='text/markdown',
-      keywords="data cleaning preprocessing",
+      keywords="automated eda exploratory-data-analysis data-cleaning data-preprocessing",
       author="Abhishek Manilal Gupta",
       author_email="abhig0209@gmail.com",
       license="MIT",
@@ -33,4 +34,5 @@ setup(name="datapurifier",
 
 
 # python setup.py bdist_wheel
+# twine upload dist/*
 # pip install dist/Autoeda-0.0.1-py3-none-any.whl
