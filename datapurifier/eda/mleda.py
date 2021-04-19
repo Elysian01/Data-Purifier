@@ -28,7 +28,7 @@ warnings.filterwarnings("ignore")
 
 
 # %matplotlib inline
-sns.set_theme(style="darkgrid")
+# sns.set_theme(style="darkgrid")
 
 
 class Mleda:

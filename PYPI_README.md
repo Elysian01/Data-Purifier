@@ -23,14 +23,14 @@ pip install data-purifier
 
 Load the module
 ```python
-from datapurifier import MLeda
+from datapurifier import Mleda
 ```
 
 Load the dataset and let the magic of automated EDA begin
 
 ```python
 df = pd.read_csv("./datasets/iris.csv")
-ae = MLeda(df)
+ae = Mleda(df)
 ae
 ```
 

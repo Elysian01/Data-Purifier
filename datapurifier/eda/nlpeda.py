@@ -7,12 +7,9 @@ from ipywidgets.widgets import widget
 import numpy as np
 import pandas as pd
 import re
-import nltk
-import spacy
-from textblob import TextBlob
+# from textblob import TextBlob
 from spacy.lang.en.stop_words import STOP_WORDS
 
-from typing import List, Set, Tuple, Dict
 from termcolor import colored
 from IPython.display import display
 import ipywidgets as widgets
