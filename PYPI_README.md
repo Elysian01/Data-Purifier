@@ -19,11 +19,13 @@
 Install the package
 ```
 pip install data-purifier
+
+python -m spacy download en_core_web_sm
 ```
 
 Load the module
 ```python
-from datapurifier import Mleda
+from datapurifier import Mleda, Nleda, Nlpurifier
 ```
 
 Load the dataset and let the magic of automated EDA begin

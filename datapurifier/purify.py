@@ -24,4 +24,4 @@ class Purify:
 
 
 if __name__ == "__main__":
-    pass
+    print("Purify WOrked!!")

@@ -14,6 +14,6 @@ from datapurifier.eda.mleda import Mleda
 from datapurifier.eda.nlpeda import Nlpeda
 from datapurifier.cleaning.nlpurifier import Nlpurifier
 
-from datapurifier.cleaning.contractions import CONTRACTIONS
+# from datapurifier.cleaning.contractions import CONTRACTIONS
 
 # from .main import Purify
