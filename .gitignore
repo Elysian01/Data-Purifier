@@ -138,10 +138,11 @@ dmypy.json
 cython_debug/
 
 ## Directories
-datasets
 datapurifier.egg-info
 dist
 
+## datasets
+twitter16m.csv
 
 ## TEMP Files
 __pycache__
