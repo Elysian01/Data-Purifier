@@ -25,6 +25,8 @@ Demo Output of Auto EDA
 Install the package
 ```
 pip install data-purifier
+
+python -m spacy download en_core_web_sm
 ```
 
 Load the module
@@ -39,5 +41,7 @@ df = pd.read_csv("./datasets/iris.csv")
 ae = MLeda(df)
 ae
 ```
+
+Example: https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing
 
 Python Package: https://pypi.org/project/data-purifier/

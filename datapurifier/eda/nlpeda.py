@@ -1,6 +1,4 @@
-"""
-Performs Automatic Exploratory Data Analysis for NLP datasets.
-"""
+"""Performs Automatic Exploratory Data Analysis for NLP datasets."""
 
 from datapurifier.widgets import Widgets
 from ipywidgets.widgets import widget
@@ -13,7 +11,6 @@ from spacy.lang.en.stop_words import STOP_WORDS
 from termcolor import colored
 from IPython.display import display
 import ipywidgets as widgets
-import ipywidgets
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -22,8 +19,7 @@ warnings.filterwarnings("ignore")
 
 
 class Nlpeda:
-    """Performs Automatic Exploratory Data Analysis for NLP datasets.
-    """
+    """Performs Automatic Exploratory Data Analysis for NLP datasets."""
 
     def __init__(self, df, target: str, explore="basic"):
         self.__set_df_and_target(df, target)

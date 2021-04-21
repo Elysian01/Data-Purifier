@@ -35,6 +35,7 @@ df = pd.read_csv("./datasets/iris.csv")
 ae = Mleda(df)
 ae
 ```
+Example: https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing
 
 Python Package: https://pypi.org/project/data-purifier/
 

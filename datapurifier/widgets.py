@@ -1,6 +1,4 @@
-'''
-Python Class for constructing jupyter notebook widgets
-'''
+'''Python Class for constructing jupyter notebook widgets'''
 
 import ipywidgets as widgets
 import ipywidgets
