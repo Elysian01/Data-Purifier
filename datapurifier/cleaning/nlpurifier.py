@@ -4,7 +4,6 @@ import unicodedata
 import pandas as pd
 import ipywidgets as widgets
 from ipywidgets import GridspecLayout
-from ipywidgets import interact, interactive, fixed, interact_manual
 
 from termcolor import colored
 from IPython.display import display
@@ -27,9 +26,12 @@ class Nlpurifier:
         self.widget = Widgets()
 
         self.purifier_widgets = {}
-        self.show_widgets()
+        self.__show_widgets()
 
-    def start_purifying(self, e):
+    def __start_purifying(self, e):
+
+        print(
+            colored(f"Dataframe contains {self.df.shape[0]} rows and {self.df.shape[1]} columns\n", "blue", attrs=["bold"]))
 
         if self.purifier_widgets["lower"]:
             self.lower()
@@ -41,10 +43,7 @@ class Nlpurifier:
             self.count_urls()
         if self.purifier_widgets["word_count"]:
             self.get_word_count()
-        if self.purifier_widgets["remove_stop_words"]:
-            self.remove_stop_words()
-        if self.purifier_widgets["remove_special_and_punct"]:
-            self.remove_special_and_punctions()
+
         if self.purifier_widgets["remove_html"]:
             self.remove_html_tags()
         if self.purifier_widgets["remove_mail"]:
@@ -57,15 +56,19 @@ class Nlpurifier:
             self.remove_accented_chars()
         # if self.purifier_widgets["remove_words"]:
         #     self.remove_words()
+        if self.purifier_widgets["remove_stop_words"]:
+            self.remove_stop_words()
+        if self.purifier_widgets["remove_special_and_punct"]:
+            self.remove_special_and_punctions()
         if self.purifier_widgets["lemma"]:
             self.leammatize()
         if self.purifier_widgets["stem"]:
             self.stemming()
 
-        print(colored("\nCompleted Purifying!\n", "green"))
+        print(colored("\nCompleted Purifying!\n", "green", attrs=["bold"]))
         print("type <obj>.df to access processed and purified dataframe")
 
-    def show_widgets(self):
+    def __show_widgets(self):
 
         self.lower_widget = self.widget.checkbox(description='Lower all Words')
         self.contraction_widget = self.widget.checkbox(
@@ -113,23 +116,23 @@ class Nlpurifier:
                 grid[i, j] = items[i][j]
 
         self.grid_output = widgets.interactive_output(
-            self.actions, {'lower': self.lower_widget, 'contraction': self.contraction_widget, 'count_mail': self.count_mail_widget,
-                           'count_urls': self.count_urls_widget, 'word_count': self.word_count_widget, 'remove_stop_words': self.remove_stop_words_widget,
-                           'remove_special_and_punct': self.remove_special_and_punct_widget, 'remove_mail': self.remove_mail_widget,
-                           'remove_html': self.remove_html_widget, 'remove_urls': self.remove_urls_widget, 'remove_spaces': self.remove_spaces_widget,
-                           'remove_accented': self.remove_accented_widget, 'remove_words': self.remove_words_widget, 'lemma': self.lemma_widget, 'stem': self.stem_widget})
+            self.__widget_interactions, {'lower': self.lower_widget, 'contraction': self.contraction_widget, 'count_mail': self.count_mail_widget,
+                                         'count_urls': self.count_urls_widget, 'word_count': self.word_count_widget, 'remove_stop_words': self.remove_stop_words_widget,
+                                         'remove_special_and_punct': self.remove_special_and_punct_widget, 'remove_mail': self.remove_mail_widget,
+                                         'remove_html': self.remove_html_widget, 'remove_urls': self.remove_urls_widget, 'remove_spaces': self.remove_spaces_widget,
+                                         'remove_accented': self.remove_accented_widget, 'remove_words': self.remove_words_widget, 'lemma': self.lemma_widget, 'stem': self.stem_widget})
 
         display(grid)
 
         start_btn = widgets.Button(description="Start Purifying")
-        start_btn.on_click(self.start_purifying)
+        start_btn.on_click(self.__start_purifying)
         display(start_btn)
 
-    def actions(self, lower, contraction, count_mail,
-                count_urls, word_count, remove_stop_words,
-                remove_special_and_punct, remove_mail, remove_html,
-                remove_urls, remove_spaces, remove_accented,
-                remove_words, lemma, stem):
+    def __widget_interactions(self, lower, contraction, count_mail,
+                              count_urls, word_count, remove_stop_words,
+                              remove_special_and_punct, remove_mail, remove_html,
+                              remove_urls, remove_spaces, remove_accented,
+                              remove_words, lemma, stem):
 
         self.purifier_widgets["lower"] = True if lower else False
         self.purifier_widgets["contraction"] = True if contraction else False
@@ -148,28 +151,28 @@ class Nlpurifier:
         self.purifier_widgets["stem"] = True if stem else False
 
     def __set_df_and_target(self, df, target):
-        self.df = df
+        self.df = df.copy()
         self.target = target
 
     def get_text(self):
         self.text = " ".join(self.df[self.target])
         return self.text
 
-    @timer
+    @timer_and_exception_handler
     def lower(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: x.lower())
 
-    @timer
+    @timer_and_exception_handler
     def remove_special_and_punctions(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: re.sub('[^A-Z a-z 0-9-]+', "", x))
 
-    @timer
+    @timer_and_exception_handler
     def remove_multiple_spaces(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: " ".join(x.split()))
 
-    @timer
+    @timer_and_exception_handler
     def remove_html_tags(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: BeautifulSoup(x, 'html.parser').get_text())
@@ -183,7 +186,7 @@ class Nlpurifier:
         else:
             return x
 
-    @timer
+    @timer_and_exception_handler
     def contraction_to_expansion(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self.__contraction_to_expansion(x))
@@ -193,45 +196,45 @@ class Nlpurifier:
             'ascii', 'ignore').decode('utf-8', 'ignore')
         return x
 
-    @timer
+    @timer_and_exception_handler
     def remove_accented_chars(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self.__remove_accented_chars(x))
 
-    @timer
+    @timer_and_exception_handler
     def remove_stop_words(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: " ".join(
             [word for word in x.split() if word not in STOP_WORDS]))
 
-    @timer
+    @timer_and_exception_handler
     def count_emails(self):
         self.df['emails'] = self.df[self.target].apply(lambda x: re.findall(
             r'([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)', x))
         self.df["emails_counts"] = self.df["emails"].apply(lambda x: len(x))
 
-    @timer
+    @timer_and_exception_handler
     def remove_emails(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: re.sub(
             r'([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)', "", x))
 
-    @timer
+    @timer_and_exception_handler
     def count_urls(self):
         self.df["urls_counts"] = self.df[self.target].apply(lambda x: len(re.findall(
             r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?', x)))
 
-    @timer
+    @timer_and_exception_handler
     def remove_urls(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: re.sub(
             r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?', "", x))
 
-    @timer
+    @timer_and_exception_handler
     def get_word_count(self):
         text = self.get_text()
         text = text.split()
         self.word_count = pd.Series(text).value_counts()
-        print("self.word_count for getting word count series")
+        print("type <obj>.word_count for getting word count series")
 
-    @timer
+    @timer_and_exception_handler
     def remove_words(self, word_list):
         """Removes words which are in word list
 
@@ -253,7 +256,7 @@ class Nlpurifier:
             lem += token.lemma_ + " "
         return lem
 
-    @timer
+    @timer_and_exception_handler
     def leammatize(self):
         print(f"""Internally for lemmatization it uses {self.nlp} spacy model,
               to change it please provide `spacy_model='your_model' in constructor`""")
@@ -263,7 +266,7 @@ class Nlpurifier:
     def __stemming(self, x):
         return " ".join([ps.stem(word) for word in x.split()])
 
-    @timer
+    @timer_and_exception_handler
     def stemming(self):
         print("Using Porter Stemmer for stemming")
         self.df[self.target] = self.df[self.target].apply(

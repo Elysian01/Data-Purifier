@@ -118,7 +118,6 @@ CONTRACTIONS = {"ain't": 'are not',
                 "that's": 'that is',
                 "there's": 'there is',
                 ' u ': ' you ',
-                ' u': ' you ',
                 ' ur ': ' your ',
                 ' n ': ' and '
                 }
