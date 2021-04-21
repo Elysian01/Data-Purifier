@@ -40,11 +40,6 @@
 - [ ] Check For
   - [ ] Emoji
     - [ ] Give a list of emoji present and perform a sentiment analysis on that.
-  - [ ] Contractions
-  - [ ] URLS
-  - [ ] HTML tags
-  - [ ] Phone Numbers
-  - [ ] Accented Characters
 
 
 ## Reference

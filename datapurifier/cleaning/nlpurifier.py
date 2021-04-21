@@ -1,6 +1,7 @@
 import re
 import spacy
 import unicodedata
+import numpy as np
 import pandas as pd
 import ipywidgets as widgets
 from ipywidgets import GridspecLayout
@@ -33,6 +34,8 @@ class Nlpurifier:
         print(
             colored(f"Dataframe contains {self.df.shape[0]} rows and {self.df.shape[1]} columns\n", "blue", attrs=["bold"]))
 
+        if self.purifier_widgets["dropna"]:
+            self.drop_null_rows()
         if self.purifier_widgets["lower"]:
             self.lower()
         if self.purifier_widgets["contraction"]:
@@ -43,7 +46,9 @@ class Nlpurifier:
             self.count_urls()
         if self.purifier_widgets["word_count"]:
             self.get_word_count()
-
+            
+        if self.purifier_widgets["remove_numbers"]:
+            self.remove_numbers()
         if self.purifier_widgets["remove_html"]:
             self.remove_html_tags()
         if self.purifier_widgets["remove_mail"]:
@@ -60,6 +65,7 @@ class Nlpurifier:
             self.remove_stop_words()
         if self.purifier_widgets["remove_special_and_punct"]:
             self.remove_special_and_punctions()
+
         if self.purifier_widgets["lemma"]:
             self.leammatize()
         if self.purifier_widgets["stem"]:
@@ -70,6 +76,10 @@ class Nlpurifier:
 
     def __show_widgets(self):
 
+        self.dropna_widget = self.widget.checkbox(
+            description='Drop Null Rows')
+        self.remove_numbers_widget = self.widget.checkbox(
+            description='Remove Numbers and Alphanumeric words')
         self.lower_widget = self.widget.checkbox(description='Lower all Words')
         self.contraction_widget = self.widget.checkbox(
             description='Contraction to Expansion')
@@ -93,22 +103,23 @@ class Nlpurifier:
         self.remove_urls_widget = self.widget.checkbox(
             description='Remove Urls')
         self.remove_words_widget = self.widget.checkbox(
-            description='Remove Words')
+            description='Remove Commonly Occuring Words')
         self.lemma_widget = self.widget.checkbox(description='Leammatize')
         self.stem_widget = self.widget.checkbox(description='Stemming')
 
         items = [
-            [self.lower_widget, self.contraction_widget, self.count_mail_widget],
-            [self.count_urls_widget, self.word_count_widget,
+            [self.dropna_widget, self.lower_widget, self.contraction_widget],
+            [self.count_urls_widget, self.word_count_widget, self.count_mail_widget],
+            [self.remove_special_and_punct_widget, self.remove_numbers_widget,
                 self.remove_stop_words_widget],
-            [self.remove_special_and_punct_widget,
+            [self.remove_words_widget,
                 self.remove_mail_widget, self.remove_html_widget],
             [self.remove_urls_widget, self.remove_spaces_widget,
                 self.remove_accented_widget],
-            [self.remove_words_widget, self.lemma_widget, self.stem_widget]
+            [self.lemma_widget, self.stem_widget]
         ]
 
-        grid_rows = 5
+        grid_rows = 6
         grid_cols = 3
         grid = GridspecLayout(grid_rows, grid_cols)
         for i in range(len(items)):
@@ -116,8 +127,9 @@ class Nlpurifier:
                 grid[i, j] = items[i][j]
 
         self.grid_output = widgets.interactive_output(
-            self.__widget_interactions, {'lower': self.lower_widget, 'contraction': self.contraction_widget, 'count_mail': self.count_mail_widget,
-                                         'count_urls': self.count_urls_widget, 'word_count': self.word_count_widget, 'remove_stop_words': self.remove_stop_words_widget,
+            self.__widget_interactions, {'dropna': self.dropna_widget, 'lower': self.lower_widget, 'contraction': self.contraction_widget, 'count_mail': self.count_mail_widget,
+                                         'count_urls': self.count_urls_widget, 'word_count': self.word_count_widget,
+                                         'remove_numbers': self.remove_numbers_widget, 'remove_stop_words': self.remove_stop_words_widget,
                                          'remove_special_and_punct': self.remove_special_and_punct_widget, 'remove_mail': self.remove_mail_widget,
                                          'remove_html': self.remove_html_widget, 'remove_urls': self.remove_urls_widget, 'remove_spaces': self.remove_spaces_widget,
                                          'remove_accented': self.remove_accented_widget, 'remove_words': self.remove_words_widget, 'lemma': self.lemma_widget, 'stem': self.stem_widget})
@@ -128,17 +140,19 @@ class Nlpurifier:
         start_btn.on_click(self.__start_purifying)
         display(start_btn)
 
-    def __widget_interactions(self, lower, contraction, count_mail,
-                              count_urls, word_count, remove_stop_words,
+    def __widget_interactions(self, dropna, lower, contraction, count_mail,
+                              count_urls, word_count, remove_numbers, remove_stop_words,
                               remove_special_and_punct, remove_mail, remove_html,
                               remove_urls, remove_spaces, remove_accented,
                               remove_words, lemma, stem):
 
+        self.purifier_widgets["dropna"] = True if dropna else False
         self.purifier_widgets["lower"] = True if lower else False
         self.purifier_widgets["contraction"] = True if contraction else False
         self.purifier_widgets["count_mail"] = True if count_mail else False
         self.purifier_widgets["count_urls"] = True if count_urls else False
         self.purifier_widgets["word_count"] = True if word_count else False
+        self.purifier_widgets["remove_numbers"] = True if remove_numbers else False
         self.purifier_widgets["remove_stop_words"] = True if remove_stop_words else False
         self.purifier_widgets["remove_special_and_punct"] = True if remove_special_and_punct else False
         self.purifier_widgets["remove_mail"] = True if remove_mail else False
@@ -158,9 +172,27 @@ class Nlpurifier:
         self.text = " ".join(self.df[self.target])
         return self.text
 
+    def drop_null_rows(self):
+        """Drops rows having [' ', 'NULL', np.nan] values """
+        total_null_rows = self.df[self.target].isin(
+            [' ', 'NULL', np.nan]).sum()
+        if total_null_rows > 0:
+            print("Dropping rows having [' ', 'NULL', numpy.nan] values")
+            self.df.dropna(inplace=True)
+            self.df.reset_index(drop=True, inplace=True)
+            print(
+                colored(f"Total Null rows dropped: {total_null_rows}\n", "red", attrs=["bold"]))
+        else:
+            print(colored("There is no null rows present.\n", "green"))
+
     @timer_and_exception_handler
     def lower(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: x.lower())
+
+    @timer_and_exception_handler
+    def remove_numbers(self):
+        self.df[self.target] = self.df[self.target].apply(
+            lambda x: re.sub(r'[0-9]', '', x))
 
     @timer_and_exception_handler
     def remove_special_and_punctions(self):
