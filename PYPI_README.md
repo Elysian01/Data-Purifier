@@ -16,10 +16,13 @@
 
 ## Get Started
 
-Install the package
-```
-pip install data-purifier
+Install the packages
 
+```bash
+pip install data-purifier
+```
+
+```bash
 python -m spacy download en_core_web_sm
 ```
 
@@ -35,6 +38,36 @@ df = pd.read_csv("./datasets/iris.csv")
 ae = Mleda(df)
 ae
 ```
+
+
+For Automated EDA and Automated Data Cleaning of NL dataset, load the dataset and pass the dataframe along with the targeted column containing textual data.
+
+```python
+nlp_df = pd.read_csv("./datasets/twitter16m.csv", header=None, encoding='latin-1')
+nlp_df.columns = ["tweets","sentiment"]
+```
+
+### Automated EDA 
+
+```python
+%%time
+eda = Nlpeda(nlp_df, "tweets", explore="basic")
+eda.df
+```
+
+### Automated Data Cleaning
+
+```python
+pure = Nlpurifier(df, "examples")
+```
+
+View the processed and purified dataframe
+
+```python
+pure.df
+```
+
+
 Example: https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing
 
 Python Package: https://pypi.org/project/data-purifier/
