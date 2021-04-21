@@ -58,7 +58,7 @@ eda.df
 ### Automated Data Cleaning
 
 ```python
-pure = Nlpurifier(df, "examples")
+pure = Nlpurifier(nlp_df, "tweets")
 ```
 
 View the processed and purified dataframe
