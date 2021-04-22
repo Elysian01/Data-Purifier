@@ -32,9 +32,8 @@
 - [ ] EDA for NLP (https://towardsdatascience.com/exploratory-data-analysis-for-natural-language-processing-ff0046ab3571)
 - [ ] Works for both input `dataframe`, `text string`
 - [x] Model For Sentiment Analysis
-- [ ] Model For finding absuive words
 - [ ] Word Frequency Analysis
-  - [ ] Total words which ocuur one, two or 3 times only
+  - [ ] Total words which occur one, two or 3 times only
 - [ ] Top Word (Visulize it via word cloud)
 - [ ] Given the word, finds it count
 - [ ] Check For

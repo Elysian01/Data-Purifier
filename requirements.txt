@@ -15,6 +15,7 @@ ipykernel>=5.5.3
 
 
 # Text analysis
+scikit-learn>=0.24.1
 textblob>=0.15.3
 tangled-up-in-unicode>=0.0.6
 

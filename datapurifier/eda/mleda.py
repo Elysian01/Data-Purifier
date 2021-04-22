@@ -289,5 +289,5 @@ class Mleda:
 
 if __name__ == "__main__":
     df = pd.read_csv("../datasets/SampleSuperstore.csv")
-    ae = MLeda(df)
+    ae = Mleda(df)
     print(ae.cat_columns)

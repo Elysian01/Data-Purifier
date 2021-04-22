@@ -11,7 +11,7 @@ from textblob import TextBlob
 from spacy.lang.en.stop_words import STOP_WORDS
 
 from termcolor import colored
-from IPython.display import display
+from IPython.display import display, clear_output
 from ipywidgets import interact
 import ipywidgets as widgets
 
@@ -22,7 +22,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import cufflinks as cf
 from plotly.offline import iplot
-# from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 
 # plt.style.use('ggplot')
 py.offline.init_notebook_mode(connected=True)
@@ -57,9 +57,14 @@ class Nlpeda:
                 "Please provide correct `target` column name, containing only textual data for analysis", "red", attrs=["bold"]))
             sys.exit(1)
 
+    def get_text(self):
+        self.text = " ".join(self.df[self.target])
+        return self.text
+
     def __start_analysis(self):
         if not self.null_values_present:
-            if self.explore == "basic" or self.explore == "advance":
+
+            if self.explore == "basic":
                 self.basic_eda()
 
                 print(colored("\nSentiment Analysis:",
@@ -67,11 +72,19 @@ class Nlpeda:
                 interact(self.sentiment_analysis, condition=widgets.Checkbox(
                     description="Perform Sentiment Analysis"))
 
-                if self.explore == "advance":
-                    self.distribution_plot()
+                self.distribution_plot()
 
-            # print(colored("\nEDA Completed!\n", "green", attrs=["bold"]))
-            print("type <obj>.df to access explored dataframe")
+                print(colored("\nEDA Completed!\n", "green", attrs=["bold"]))
+                print("type <obj>.df to access explored dataframe")
+
+            if self.explore == "ngram":
+                self.unigram_df = pd.DataFrame()
+                self.bigram_df = pd.DataFrame()
+                self.trigram_df = pd.DataFrame()
+                self.unigram_statistics()
+                self.bigram_statistics()
+                self.trigram_statistics()
+                self.ngram_plot()
 
     def print_shape(self):
         print(
@@ -197,7 +210,7 @@ class Nlpeda:
         col = self.df.columns.tolist()
         col.remove(self.target)
         column_dropdown = self.widget.dropdown(
-            options=col, value=None, description="Select Column:")
+            options=col, value=None, description="Column: ")
 
         items = [column_dropdown]
 
@@ -206,6 +219,208 @@ class Nlpeda:
                                             'column': column_dropdown})
 
         display(hist_plot_ui, output)
+
+    def get_top_n_words(self, x, n: int, ngram_range: tuple, include_stop_words: bool = False):
+        if include_stop_words:
+            vec = CountVectorizer(ngram_range=ngram_range).fit(x)
+        else:
+            vec = CountVectorizer(ngram_range=ngram_range,
+                                  stop_words="english").fit(x)
+
+        bow = vec.transform(x)
+        sum_words = bow.sum(axis=0)
+        word_frequence = [(word, sum_words[0, idx])
+                          for word, idx in vec.vocabulary_.items()]
+        word_frequence = sorted(
+            word_frequence, key=lambda x: x[1], reverse=True)
+        return word_frequence[:n]
+
+    # Unigram Analysis
+
+    def __unigram_interaction(self, top_unigram: int) -> None:
+        self.top_unigram = top_unigram
+
+    def __unigram_stop_word_interaction(self, condition: bool):
+        self.unigram_stop_words = condition
+
+    def __start_unigram(self, e):
+        # clear_output(wait=True)
+        print(
+            f"Please wait starting unigram analysis for getting top {self.top_unigram} words...")
+
+        self.unigram = self.get_top_n_words(self.df[self.target], self.top_unigram,
+                                            (1, 1), self.unigram_stop_words)
+        self.unigram_df = pd.DataFrame(self.unigram, columns=[
+            "unigram", "frequence"])
+
+        # display(self.unigram_df.head(3))
+        print("Analysis Completed!, to view whole dataframe type 'obj.unigram_df'")
+
+    def __perform_unigram(self, condition: bool):
+        if condition:
+            top_unigram_widget = self.widget.int_slider(
+                minimum=1, maximum=100, step=1, value=10, description="Top Words:")
+
+            interact(self.__unigram_stop_word_interaction, condition=widgets.Checkbox(
+                description="Include Stop words in analysis"))
+
+            widgets.interactive_output(
+                self.__unigram_interaction, {'top_unigram': top_unigram_widget})
+
+            display(top_unigram_widget)
+
+            unigram_button = widgets.Button(
+                description='Start Analysis',
+                button_style='info',
+                tooltip='Start Unigram Analysis',
+            )
+
+            unigram_button.on_click(self.__start_unigram)
+            display(unigram_button)
+
+    @exception_handler
+    def unigram_statistics(self):
+        print(colored("Unigram Analysis: ", "blue", attrs=["bold"]))
+        interact(self.__perform_unigram, condition=widgets.Checkbox(
+            description="Perform Unigram"))
+
+    # Bigram Analysis
+
+    def __bigram_interaction(self, top_bigram: int) -> None:
+        self.top_bigram = top_bigram
+
+    def __bigram_stop_word_interaction(self, condition: bool):
+        self.bigram_stop_words = condition
+
+    def __start_bigram(self, e):
+        # clear_output(wait=True)
+        print(
+            f"Please wait starting Bigram analysis for getting top {self.top_bigram} words...")
+
+        self.bigram = self.get_top_n_words(self.df[self.target], self.top_bigram,
+                                           (2, 2), self.bigram_stop_words)
+        self.bigram_df = pd.DataFrame(self.bigram, columns=[
+            "bigram", "frequence"])
+
+        # display(self.bigram_df.head(3))
+        print("Analysis Completed!, to view whole dataframe type 'obj.bigram_df'")
+
+    def __perform_bigram(self, condition: bool):
+
+        if condition:
+            top_bigram_widget = self.widget.int_slider(
+                minimum=1, maximum=100, step=1, value=10, description="Top Words:")
+
+            interact(self.__bigram_stop_word_interaction, condition=widgets.Checkbox(
+                description="Include Stop words in analysis"))
+
+            widgets.interactive_output(
+                self.__bigram_interaction, {'top_bigram': top_bigram_widget})
+
+            display(top_bigram_widget)
+
+            bigram_button = widgets.Button(
+                description='Start Analysis',
+                button_style='info',
+                tooltip='Start Bigram Analysis',
+            )
+
+            bigram_button.on_click(self.__start_bigram)
+            display(bigram_button)
+
+    @exception_handler
+    def bigram_statistics(self):
+        print(colored("Bigram Analysis: ", "blue", attrs=["bold"]))
+        interact(self.__perform_bigram, condition=widgets.Checkbox(
+            description="Perform Bigram"))
+
+    # Trigram Analysis
+
+    def __trigram_interaction(self, top_trigram: int) -> None:
+        self.top_trigram = top_trigram
+
+    def __trigram_stop_word_interaction(self, condition: bool):
+        self.trigram_stop_words = condition
+
+    def __start_trigram(self, e):
+        print(
+            f"Please wait starting Trigram analysis for getting top {self.top_trigram} words...")
+
+        self.trigram = self.get_top_n_words(self.df[self.target], self.top_trigram,
+                                            (3, 3), self.trigram_stop_words)
+        self.trigram_df = pd.DataFrame(self.trigram, columns=[
+            "trigram", "frequence"])
+
+        # display(self.trigram_df.head(3))
+        print("Analysis Completed!, to view whole dataframe type 'obj.trigram_df'")
+
+    def __perform_trigram(self, condition: bool):
+        if condition:
+            top_trigram_widget = self.widget.int_slider(
+                minimum=1, maximum=100, step=1, value=10, description="Top Words:")
+
+            interact(self.__trigram_stop_word_interaction, condition=widgets.Checkbox(
+                description="Include Stop words in analysis"))
+
+            widgets.interactive_output(
+                self.__trigram_interaction, {'top_trigram': top_trigram_widget})
+
+            display(top_trigram_widget)
+
+            trigram_button = widgets.Button(
+                description='Start Analysis',
+                button_style='info',
+                tooltip='Start Trigram Analysis',
+            )
+
+            trigram_button.on_click(self.__start_trigram)
+            display(trigram_button)
+
+    @exception_handler
+    def trigram_statistics(self):
+        print(colored("Trigram Analysis: ", "blue", attrs=["bold"]))
+        interact(self.__perform_trigram, condition=widgets.Checkbox(
+            description="Perform Trigram"))
+
+    def __ngram_plot(self, df):
+        if df == "Unigram":
+            plot_df = self.unigram_df.set_index("unigram")
+            plot_df.iplot(kind="bar", xTitle="Unigram",
+                          yTitle="Frequence", title="Top Unigram words")
+        if df == "Bigram":
+            plot_df = self.bigram_df.set_index("bigram")
+            plot_df.iplot(kind="bar", xTitle="Bigram",
+                          yTitle="Frequence", title="Top Bigram words")
+        if df == "Trigram":
+            plot_df = self.trigram_df.set_index("trigram")
+            plot_df.iplot(kind="bar", xTitle="Trigram",
+                          yTitle="Frequence", title="Top Trigram words")
+
+    def __perform_ngram(self, condition: bool):
+        if condition:
+            df = []
+            if not self.unigram_df.empty:
+                df.append("Unigram")
+            if not self.bigram_df.empty:
+                df.append("Bigram")
+            if not self.trigram_df.empty:
+                df.append("Trigram")
+
+            df_dropdown = self.widget.dropdown(
+                options=df, value=None, description="N-Grams: ")
+
+            items = [df_dropdown]
+
+            hist_plot_ui = widgets.HBox(items)
+            output = widgets.interactive_output(self.__ngram_plot, {
+                                                'df': df_dropdown})
+
+            display(hist_plot_ui, output)
+
+    def ngram_plot(self):
+        print(colored("Plot Ngram Plots: ", "blue", attrs=["bold"]))
+        interact(self.__perform_ngram, condition=widgets.Checkbox(
+            description="Start Plotting"))
 
 
 if __name__ == "__main__":
