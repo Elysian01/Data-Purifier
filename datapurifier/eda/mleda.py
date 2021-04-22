@@ -41,7 +41,7 @@ class Mleda:
 
     """
 
-    def __init__(self, df):
+    def __init__(self, df: pd.DataFrame):
         self.__set_df(df)
         self.__init_variable(df)
 
@@ -78,7 +78,7 @@ class Mleda:
         self.num_cols = df.select_dtypes(include=numerics).columns.tolist()
         return self.num_cols
 
-    def shape(self, df, formatted_output: bool = True) -> None:
+    def shape(self, df, formatted_output: bool = False) -> None:
         if not formatted_output:
             print("Shape of DataFrame: ", df.shape)
             return

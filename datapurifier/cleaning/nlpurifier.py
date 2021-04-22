@@ -1,4 +1,5 @@
 import re
+import sys
 import spacy
 import unicodedata
 import numpy as np
@@ -21,7 +22,7 @@ ps = PorterStemmer()
 
 class Nlpurifier:
 
-    def __init__(self: str, df, target: str, spacy_model="en_core_web_sm"):
+    def __init__(self: str, df: pd.DataFrame, target: str, spacy_model="en_core_web_sm"):
         self.__set_df_and_target(df, target)
         self.nlp = spacy.load(spacy_model)
         self.widget = Widgets()
@@ -46,7 +47,7 @@ class Nlpurifier:
             self.count_urls()
         if self.purifier_widgets["word_count"]:
             self.get_word_count()
-            
+
         if self.purifier_widgets["remove_numbers"]:
             self.remove_numbers()
         if self.purifier_widgets["remove_html"]:
@@ -71,7 +72,7 @@ class Nlpurifier:
         if self.purifier_widgets["stem"]:
             self.stemming()
 
-        print(colored("\nCompleted Purifying!\n", "green", attrs=["bold"]))
+        print(colored("\nPurifying Completed!\n", "green", attrs=["bold"]))
         print("type <obj>.df to access processed and purified dataframe")
 
     def __show_widgets(self):
@@ -166,7 +167,12 @@ class Nlpurifier:
 
     def __set_df_and_target(self, df, target):
         self.df = df.copy()
-        self.target = target
+        if target in self.df.columns:
+            self.target = target
+        else:
+            print(colored(
+                "Please provide correct `target` column name, containing only textual data for analysis", "red", attrs=["bold"]))
+            sys.exit(1)
 
     def get_text(self):
         self.text = " ".join(self.df[self.target])
