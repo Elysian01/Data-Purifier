@@ -4,6 +4,8 @@ joblib
 scipy>=1.4.1
 pandas>=0.25.3,!=1.0.1,!=1.0.0,!=1.0.2,!=1.1.0
 matplotlib>=3.2.0
+plotly>=4.14.3
+cufflinks>=0.17.3
 confuse>=1.0.0
 jinja2>=2.11.1
 numpy>=1.16.0

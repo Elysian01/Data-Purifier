@@ -1,5 +1,8 @@
 """Performs Automatic Exploratory Data Analysis for NLP datasets."""
 
+import warnings
+from datapurifier.decorators import *
+from datapurifier.widgets import Widgets
 import re
 import sys
 import numpy as np
@@ -12,10 +15,20 @@ from IPython.display import display
 from ipywidgets import interact
 import ipywidgets as widgets
 
-from datapurifier.widgets import Widgets
-from datapurifier.decorators import *
+import matplotlib.pyplot as plt
+# import seaborn as sns
+import plotly as py
+import plotly.express as px
+import plotly.graph_objects as go
+import cufflinks as cf
+from plotly.offline import iplot
+# from sklearn.feature_extraction.text import CountVectorizer
 
-import warnings
+# plt.style.use('ggplot')
+py.offline.init_notebook_mode(connected=True)
+cf.go_offline()
+
+
 warnings.filterwarnings("ignore")
 
 
@@ -30,7 +43,6 @@ class Nlpeda:
         self.explore = explore
         self.widget = Widgets()
 
-        self.print_shape()
         self.null_values_present = True
         self.handle_null_values()
 
@@ -47,10 +59,18 @@ class Nlpeda:
 
     def __start_analysis(self):
         if not self.null_values_present:
-            if self.explore == "basic":
+            if self.explore == "basic" or self.explore == "advance":
                 self.basic_eda()
 
-            print(colored("\nEDA Completed!\n", "green", attrs=["bold"]))
+                print(colored("\nSentiment Analysis:",
+                      "red", attrs=["bold"]))
+                interact(self.sentiment_analysis, condition=widgets.Checkbox(
+                    description="Perform Sentiment Analysis"))
+
+                if self.explore == "advance":
+                    self.distribution_plot()
+
+            # print(colored("\nEDA Completed!\n", "green", attrs=["bold"]))
             print("type <obj>.df to access explored dataframe")
 
     def print_shape(self):
@@ -91,7 +111,7 @@ class Nlpeda:
         display(self.null_df)
         return self.null_df
 
-    def drop_null_rows(self, x):
+    def drop_null_rows(self, x: bool):
         """Drops rows having [' ', 'NULL', np.nan] values """
         if x:
             total_null_rows = self.df[self.target].isin(
@@ -111,6 +131,7 @@ class Nlpeda:
     def handle_null_values(self) -> bool:
         # Null value analysis
         if self.df.isnull().sum().sum() > 0:
+            self.print_shape()
             self.null_columns_percentage()
             print("Please select to 'drop all null rows', to continue analysis of data.")
             interact(self.drop_null_rows, x=widgets.Checkbox(
@@ -120,6 +141,27 @@ class Nlpeda:
             self.null_values_present = False
             print(colored(
                 "\nCongrats!!, The Dataframe has NO NULL VALUES\n", "green", attrs=["bold"]))
+
+    @conditional_timer
+    def __distplot_for_sentiment(self, condition: str) -> None:
+        if condition:
+            column = "polarity"
+            plt.figure(figsize=(6, 4))
+            plt.hist(self.df[column], bins=15, color='#0504aa',
+                     alpha=0.7, rwidth=0.85)
+            plt.xlabel = column
+            plt.ylabel = "Count"
+            plt.title(column + " Distribution")
+
+    @conditional_timer
+    def sentiment_analysis(self, condition: bool):
+        if condition:
+            self.df["polarity"] = self.df[self.target].apply(
+                lambda x: TextBlob(x).sentiment.polarity)
+            display(self.df[[self.target, "polarity"]].head())
+
+            interact(self.__distplot_for_sentiment, condition=widgets.Checkbox(
+                description="Plot Distribution of Sentiment Analysis"))
 
     @timer_and_exception_handler
     def basic_eda(self):
@@ -142,6 +184,28 @@ class Nlpeda:
             [word for word in x if word.isupper() and len(x) > 3]))
 
         display(self.df.head())
+
+    def __distplot(self, column: str) -> None:
+        if column:
+            self.df[column].iplot(kind="hist", xTitle=column,
+                                  yTitle="Count", title=column + " Distribution")
+
+    def distribution_plot(self):
+        """Plots Distribution Plot of various columns in dataframe"""
+
+        print(colored("\nDistribution Analysis:", "red", attrs=["bold"]))
+        col = self.df.columns.tolist()
+        col.remove(self.target)
+        column_dropdown = self.widget.dropdown(
+            options=col, value=None, description="Select Column:")
+
+        items = [column_dropdown]
+
+        hist_plot_ui = widgets.HBox(items)
+        output = widgets.interactive_output(self.__distplot, {
+                                            'column': column_dropdown})
+
+        display(hist_plot_ui, output)
 
 
 if __name__ == "__main__":
