@@ -246,7 +246,7 @@ class Nlpeda:
     def __start_unigram(self, e):
         # clear_output(wait=True)
         print(
-            f"Please wait starting unigram analysis for getting top {self.top_unigram} words...")
+            f"Please wait starting unigram word analysis for getting top {self.top_unigram} words...")
 
         self.unigram = self.get_top_n_words(self.df[self.target], self.top_unigram,
                                             (1, 1), self.unigram_stop_words)
@@ -259,7 +259,7 @@ class Nlpeda:
     def __perform_unigram(self, condition: bool):
         if condition:
             top_unigram_widget = self.widget.int_slider(
-                minimum=1, maximum=100, step=1, value=10, description="Top Words:")
+                minimum=1, maximum=100, step=1, value=10, description="Word Range:")
 
             interact(self.__unigram_stop_word_interaction, condition=widgets.Checkbox(
                 description="Include Stop words in analysis"))
@@ -295,7 +295,7 @@ class Nlpeda:
     def __start_bigram(self, e):
         # clear_output(wait=True)
         print(
-            f"Please wait starting Bigram analysis for getting top {self.top_bigram} words...")
+            f"Please wait starting Bigram word analysis for getting top {self.top_bigram} words...")
 
         self.bigram = self.get_top_n_words(self.df[self.target], self.top_bigram,
                                            (2, 2), self.bigram_stop_words)
@@ -309,7 +309,7 @@ class Nlpeda:
 
         if condition:
             top_bigram_widget = self.widget.int_slider(
-                minimum=1, maximum=100, step=1, value=10, description="Top Words:")
+                minimum=1, maximum=100, step=1, value=10, description="Word Range:")
 
             interact(self.__bigram_stop_word_interaction, condition=widgets.Checkbox(
                 description="Include Stop words in analysis"))
@@ -344,7 +344,7 @@ class Nlpeda:
 
     def __start_trigram(self, e):
         print(
-            f"Please wait starting Trigram analysis for getting top {self.top_trigram} words...")
+            f"Please wait starting Trigram word analysis for getting top {self.top_trigram} words...")
 
         self.trigram = self.get_top_n_words(self.df[self.target], self.top_trigram,
                                             (3, 3), self.trigram_stop_words)
@@ -357,7 +357,7 @@ class Nlpeda:
     def __perform_trigram(self, condition: bool):
         if condition:
             top_trigram_widget = self.widget.int_slider(
-                minimum=1, maximum=100, step=1, value=10, description="Top Words:")
+                minimum=1, maximum=100, step=1, value=10, description="Word Range:")
 
             interact(self.__trigram_stop_word_interaction, condition=widgets.Checkbox(
                 description="Include Stop words in analysis"))
@@ -397,6 +397,7 @@ class Nlpeda:
                           yTitle="Frequence", title="Top Trigram words")
 
     def __perform_ngram(self, condition: bool):
+        print("To refresh selection, uncheck and check `Start Plotting` checkbox")
         if condition:
             df = []
             if not self.unigram_df.empty:
