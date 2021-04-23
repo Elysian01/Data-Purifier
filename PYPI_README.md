@@ -49,10 +49,18 @@ nlp_df.columns = ["tweets","sentiment"]
 
 ### Automated EDA 
 
+For Basic EDA, pass the argument `basic` as argument in constructor
 ```python
 %%time
-eda = Nlpeda(nlp_df, "tweets", explore="basic")
+eda = Nlpeda(nlp_df, "tweets", analyse="basic")
 eda.df
+```
+
+For Word based EDA, pass the argument `word` as argument in constructor
+```python
+%%time
+eda = Nlpeda(nlp_df, "tweets", analyse="word")
+eda.unigram_df # for seeing unigram datfarame
 ```
 
 ### Automated Data Cleaning
