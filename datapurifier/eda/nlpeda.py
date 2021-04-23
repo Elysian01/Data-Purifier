@@ -60,13 +60,6 @@ class Nlpeda:
                 "Please provide correct `target` column name, containing only textual data for analysis", "red", attrs=["bold"]))
             sys.exit(1)
 
-    def preprocess_text(self):
-        """Generates a complete documnet containing only text, list of all words, and count of each word """
-        self.text = " ".join(self.df[self.target])
-        self.word_list = self.text.split()
-        self.word_count = pd.Series(self.text).value_counts()
-        return self.text, self.word_list, self.word_count
-
     def __start_analysis(self):
         if not self.null_values_present:
 
@@ -85,6 +78,7 @@ class Nlpeda:
 
             if self.analyse == "word":
                 self.preprocess_text()
+                self.find_word_count()
                 self.plot_wordcloud()
 
                 self.unigram_df = pd.DataFrame()
@@ -94,6 +88,13 @@ class Nlpeda:
                 self.bigram_statistics()
                 self.trigram_statistics()
                 self.ngram_plot()
+
+    def preprocess_text(self):
+        """Generates a complete documnet containing only text, list of all words, and count of each word """
+        self.text = " ".join(self.df[self.target])
+        self.word_list = self.text.split()
+        self.word_count = pd.Series(self.word_list).value_counts()
+        return self.text, self.word_list, self.word_count
 
     def print_shape(self):
         print(
@@ -235,11 +236,25 @@ class Nlpeda:
     -------------------------------------------------------------------
     """
 
+    def __perform_word_count(self, word):
+        if word:
+            try:
+                print(
+                    f"The word '{word}' has occured {self.word_count[word]} times in dataset.")
+            except:
+                print("No such word in dataset.")
+
+    def find_word_count(self):
+        print(colored("Enter Word and find its count: ",
+              "blue", attrs=["bold"]))
+        interact(self.__perform_word_count, word=widgets.Text(
+            placeholder="Enter Your word here", description="Word"))
+
     @exception_handler
     def __perform_wordcloud_visualization(self, condition):
         if condition:
             print("Please wait plotting wordcloud...")
-            wc = WordCloud(width=800, height=400).generate(self.text)
+            wc = WordCloud(width=1000, height=400).generate(self.text)
             plt.axis("off")
             plt.imshow(wc)
 
@@ -415,15 +430,15 @@ class Nlpeda:
         if df == "Unigram":
             plot_df = self.unigram_df.set_index("unigram")
             plot_df.iplot(kind="bar", xTitle="Unigram",
-                          yTitle="Frequence", title="Top Unigram words")
+                          yTitle="Frequence", title="Top Unigram words", dimensions=(1000, 350))
         if df == "Bigram":
             plot_df = self.bigram_df.set_index("bigram")
             plot_df.iplot(kind="bar", xTitle="Bigram",
-                          yTitle="Frequence", title="Top Bigram words")
+                          yTitle="Frequence", title="Top Bigram words", dimensions=(1000, 350))
         if df == "Trigram":
             plot_df = self.trigram_df.set_index("trigram")
             plot_df.iplot(kind="bar", xTitle="Trigram",
-                          yTitle="Frequence", title="Top Trigram words")
+                          yTitle="Frequence", title="Top Trigram words", dimensions=(1000, 350))
 
     @exception_handler
     def __perform_ngram(self, condition: bool):
