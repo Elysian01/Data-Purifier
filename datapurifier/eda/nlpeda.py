@@ -11,7 +11,8 @@ from textblob import TextBlob
 from spacy.lang.en.stop_words import STOP_WORDS
 
 from termcolor import colored
-from IPython.display import display, clear_output
+from IPython.display import display
+from wordcloud import WordCloud
 from ipywidgets import interact
 import ipywidgets as widgets
 
@@ -38,11 +39,13 @@ warnings.filterwarnings("ignore")
 class Nlpeda:
     """Performs Automatic Exploratory Data Analysis for NLP datasets."""
 
-    def __init__(self, df: pd.DataFrame, target: str, explore="basic"):
+    def __init__(self, df: pd.DataFrame, target: str, analyse="basic"):
         self.__set_df_and_target(df, target)
-        self.explore = explore
+        self.analyse = analyse
         self.widget = Widgets()
 
+        self.word_list = []
+        self.word_count = None
         self.null_values_present = True
         self.handle_null_values()
 
@@ -57,14 +60,17 @@ class Nlpeda:
                 "Please provide correct `target` column name, containing only textual data for analysis", "red", attrs=["bold"]))
             sys.exit(1)
 
-    def get_text(self):
+    def preprocess_text(self):
+        """Generates a complete documnet containing only text, list of all words, and count of each word """
         self.text = " ".join(self.df[self.target])
-        return self.text
+        self.word_list = self.text.split()
+        self.word_count = pd.Series(self.text).value_counts()
+        return self.text, self.word_list, self.word_count
 
     def __start_analysis(self):
         if not self.null_values_present:
 
-            if self.explore == "basic":
+            if self.analyse == "basic":
                 self.basic_eda()
 
                 print(colored("\nSentiment Analysis:",
@@ -77,7 +83,10 @@ class Nlpeda:
                 print(colored("\nEDA Completed!\n", "green", attrs=["bold"]))
                 print("type <obj>.df to access explored dataframe")
 
-            if self.explore == "ngram":
+            if self.analyse == "word":
+                self.preprocess_text()
+                self.plot_wordcloud()
+
                 self.unigram_df = pd.DataFrame()
                 self.bigram_df = pd.DataFrame()
                 self.trigram_df = pd.DataFrame()
@@ -220,6 +229,26 @@ class Nlpeda:
 
         display(hist_plot_ui, output)
 
+    """
+    -------------------------------------------------------------------
+    Word Analysis Start
+    -------------------------------------------------------------------
+    """
+
+    @exception_handler
+    def __perform_wordcloud_visualization(self, condition):
+        if condition:
+            print("Please wait plotting wordcloud...")
+            wc = WordCloud(width=800, height=400).generate(self.text)
+            plt.axis("off")
+            plt.imshow(wc)
+
+    @exception_handler
+    def plot_wordcloud(self):
+        print(colored("Plot Wordcloud: ", "blue", attrs=["bold"]))
+        interact(self.__perform_wordcloud_visualization, condition=widgets.Checkbox(
+            description="Plot Wordcloud"))
+
     def get_top_n_words(self, x, n: int, ngram_range: tuple, include_stop_words: bool = False):
         if include_stop_words:
             vec = CountVectorizer(ngram_range=ngram_range).fit(x)
@@ -293,7 +322,6 @@ class Nlpeda:
         self.bigram_stop_words = condition
 
     def __start_bigram(self, e):
-        # clear_output(wait=True)
         print(
             f"Please wait starting Bigram word analysis for getting top {self.top_bigram} words...")
 
@@ -382,6 +410,7 @@ class Nlpeda:
         interact(self.__perform_trigram, condition=widgets.Checkbox(
             description="Perform Trigram"))
 
+    @exception_handler
     def __ngram_plot(self, df):
         if df == "Unigram":
             plot_df = self.unigram_df.set_index("unigram")
@@ -396,8 +425,9 @@ class Nlpeda:
             plot_df.iplot(kind="bar", xTitle="Trigram",
                           yTitle="Frequence", title="Top Trigram words")
 
+    @exception_handler
     def __perform_ngram(self, condition: bool):
-        print("To refresh selection, uncheck and check `Start Plotting` checkbox")
+        print("To refresh selection, please uncheck and check `Start Plotting` checkbox")
         if condition:
             df = []
             if not self.unigram_df.empty:
@@ -418,6 +448,7 @@ class Nlpeda:
 
             display(hist_plot_ui, output)
 
+    @exception_handler
     def ngram_plot(self):
         print(colored("Plot Ngram Plots: ", "blue", attrs=["bold"]))
         interact(self.__perform_ngram, condition=widgets.Checkbox(

@@ -32,14 +32,18 @@
 - [ ] EDA for NLP (https://towardsdatascience.com/exploratory-data-analysis-for-natural-language-processing-ff0046ab3571)
 - [ ] Works for both input `dataframe`, `text string`
 - [x] Model For Sentiment Analysis
-- [ ] Word Frequency Analysis
-  - [ ] Total words which occur one, two or 3 times only
-- [ ] Top Word (Visulize it via word cloud)
+- [x] Word Frequency Analysis
+  - [x] Total words which occur one, two or 3 times only
+- [x] Top Word (Visulize it via word cloud)
 - [ ] Given the word, finds it count
 - [ ] Check For
   - [ ] Emoji
     - [ ] Give a list of emoji present and perform a sentiment analysis on that.
 
+## Cleaning
+
+- [ ] Removing Emoji
+- [ ] Radio-button for lemmatization and stemming
 
 ## Reference
 
