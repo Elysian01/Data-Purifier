@@ -288,7 +288,6 @@ class Nlpeda:
         self.unigram_stop_words = condition
 
     def __start_unigram(self, e):
-        # clear_output(wait=True)
         print(
             f"Please wait starting unigram word analysis for getting top {self.top_unigram} words...")
 

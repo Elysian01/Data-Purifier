@@ -24,7 +24,7 @@ tangled-up-in-unicode>=0.0.6
 requests>=2.24.0
 
 # Progress bar
-tqdm>=4.48.2
+# tqdm>=4.48.2
 seaborn>=0.10.1
 
 spacy>=3.0.0,<4.0.0

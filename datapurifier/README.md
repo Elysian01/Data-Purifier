@@ -29,13 +29,12 @@
 
 - Summarize main characteristics of data.
 
-- [ ] EDA for NLP (https://towardsdatascience.com/exploratory-data-analysis-for-natural-language-processing-ff0046ab3571)
-- [ ] Works for both input `dataframe`, `text string`
+- [x] EDA for NLP (https://towardsdatascience.com/exploratory-data-analysis-for-natural-language-processing-ff0046ab3571)
 - [x] Model For Sentiment Analysis
 - [x] Word Frequency Analysis
   - [x] Total words which occur one, two or 3 times only
 - [x] Top Word (Visulize it via word cloud)
-- [ ] Given the word, finds it count
+- [x] Given the word, finds it count
 - [ ] Check For
   - [ ] Emoji
     - [ ] Give a list of emoji present and perform a sentiment analysis on that.
@@ -44,6 +43,19 @@
 
 - [ ] Removing Emoji
 - [ ] Radio-button for lemmatization and stemming
+
+## Analysis
+- [ ] LDA
+- [ ] PCA (Principal Component Analysis)
+
+## Machine Learning and Deep Learning Model input preprocessing.
+
+- [ ] Word 2 Vector
+  - [ ] Count
+  - [ ] TF-IDF
+  - [ ] Hash
+  - [ ] Word Embedding
+- [ ] Encoding categorical values
 
 ## Reference
 
@@ -98,13 +110,13 @@
 - [ ] Deep Learning
   
 - [ ] Natural Language Processing 
-  - [ ]  Text Preprocessing
-    - [ ]  Stop words removal
-    - [ ]  punctuation removal
-    - [ ]  Quotes word to normal word conversation
-    - [ ]  Number removal
+  - [x]  Text Preprocessing
+    - [x]  Stop words removal
+    - [x]  punctuation removal
+    - [x]  Quotes word to normal word conversation
+    - [x]  Number removal
   - [ ] Emoji removal
-  - [ ] HTML left-outs removal 
+  - [x] HTML left-outs removal 
   
 - [ ] Suggest Data Cleaning Techniques and methods
 
@@ -140,3 +152,10 @@
 - [ ] Performing all operations/steps column-wise
 - [ ] Instead of performing all EDA, option to perform `basic` EDA (given as parameter to constructor)
 - [ ] user can access special class variables which are set after analysis (like mleda.cat_columns)
+
+## Deployment Testing
+
+- [x] Jupyter Notebook
+- [ ] Kaggle
+- [ ] Colab
+- [ ] Binder
