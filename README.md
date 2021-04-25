@@ -1,6 +1,12 @@
 # Data-Purifier
 
-### A Python library for Automated Exploratory Data Analysis, Automated Data Cleaning and Automated Data Preprocessing For Machine Learning and Natural Language Processing in Python.
+### A Python library for Automated Exploratory Data Analysis, Automated Data Cleaning and Automated Data Preprocessing For Machine Learning and Natural Language Processing Applications in Python.
+
+[![PyPI version](https://badge.fury.io/py/data-purifier.svg)](https://badge.fury.io/py/data-purifier)
+[![License](https://img.shields.io/pypi/l/ansicolortags.svg)](https://img.shields.io/pypi/l/ansicolortags.svg) 
+[![Python Version](https://img.shields.io/pypi/pyversions/pandas-profiling)](https://pypi.org/project/data-purifier/)
+[![PyPi Downloads](https://static.pepy.tech/personalized-badge/data-purifier?period=total&units=international_system&left_color=black&right_color=orange&left_text=Downloads)](https://pepy.tech/project/data-purifier)
+
 
 
 ## Features
