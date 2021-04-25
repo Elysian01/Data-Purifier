@@ -156,6 +156,6 @@
 ## Deployment Testing
 
 - [x] Jupyter Notebook
-- [ ] Kaggle
+- [x] Kaggle
 - [ ] Colab
 - [ ] Binder
