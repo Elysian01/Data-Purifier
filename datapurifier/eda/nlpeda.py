@@ -315,8 +315,7 @@ class Nlpeda:
 
             unigram_button = widgets.Button(
                 description='Start Analysis',
-                button_style='info',
-                tooltip='Start Unigram Analysis',
+                tooltip='Start Unigram Analysis'
             )
 
             unigram_button.on_click(self.__start_unigram)
@@ -364,8 +363,7 @@ class Nlpeda:
 
             bigram_button = widgets.Button(
                 description='Start Analysis',
-                button_style='info',
-                tooltip='Start Bigram Analysis',
+                tooltip='Start Bigram Analysis'
             )
 
             bigram_button.on_click(self.__start_bigram)
@@ -412,8 +410,7 @@ class Nlpeda:
 
             trigram_button = widgets.Button(
                 description='Start Analysis',
-                button_style='info',
-                tooltip='Start Trigram Analysis',
+                tooltip='Start Trigram Analysis'
             )
 
             trigram_button.on_click(self.__start_trigram)
