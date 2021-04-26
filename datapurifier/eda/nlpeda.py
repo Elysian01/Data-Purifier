@@ -184,7 +184,7 @@ class Nlpeda:
             display(self.df[[self.target, "polarity"]].head())
 
             interact(self.__distplot_for_sentiment, condition=widgets.Checkbox(
-                description="Plot Distribution of Sentiment Analysis"))
+                description="Plot Sentiment Distribution"))
 
     @timer_and_exception_handler
     def basic_eda(self):

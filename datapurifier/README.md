@@ -57,6 +57,8 @@
   - [ ] Word Embedding
 - [ ] Encoding categorical values
 
+## Automated Visualization
+
 ## Reference
 
 [Towards Data science blog](https://towardsdatascience.com/nlp-part-3-exploratory-data-analysis-of-text-data-1caa8ab3f79d)

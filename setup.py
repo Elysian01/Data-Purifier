@@ -26,9 +26,9 @@ classifiers = [
 ]
 
 setup(name="data-purifier",
-      version="0.1.8",
+      version="0.1.9",
       description="A Python library for Automated Exploratory Data Analysis, Automated Data Cleaning and Automated Data Preprocessing For Machine Learning and Natural Language Processing in Python.",
-      url="",
+      url="https://github.com/Elysian01/Data-Purifier",
       long_description=open("PYPI_README.md", encoding='utf-8').read(),
       long_description_content_type='text/markdown',
       keywords="automated eda exploratory-data-analysis data-cleaning data-preprocessing python jupyter ipython",
