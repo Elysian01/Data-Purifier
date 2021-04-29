@@ -72,15 +72,15 @@ ae
    4. Stop Word Count
    5. Uppercase Word Count
 
-Later you can also observe distribution of above mentioned analysis just by selecting the column from dropdown list, and our system will automatically plot it.
+Later you can also observe distribution of above mentioned analysis just by selecting the column from the dropdown list, and our system will automatically plot it.
 
 * It can also perform `sentiment analysis` on dataframe row by row, giving the polarity of each sentence (or row), later you can also view the `distribution of polarity`.
 
 **Word Analysis**
 
-* Can find count of `specific word` mentioned by the user
+* Can find count of `specific word` mentioned by the user in the textbox.
 * Plots `wordcloud plot`
-* Perform `Unigram, Bigram, and Trigram analysis`, returning the dataframe of each and also showing its distribution plot.
+* Perform `Unigram, Bigram, and Trigram` analysis, returning the dataframe of each and also showing its respective distribution plot.
 
 **Code Implementation**
 
@@ -112,14 +112,15 @@ eda.unigram_df # for seeing unigram datfarame
 
 It provides following cleaning techniques, where you have to just tick the checkbox and our system will automatically perform the operation for you.
 
-| Features                                   | Features                              | Features                   |
-| ------------------------------------------ | ------------------------------------- | -------------------------- |
-| Drop Null Rows                             | Lower all Words                       | Contraction to Expansion   |
-| Count Urls                                 | Get Word Count                        | Count Mails                |
-| Remove Special Characters and Punctuations | Remove Numbers and Alphanumeric words | Remove Stop Words          |
-| Remove Commonly Occuring Words             | Remove Mails                          | Remove Html Tags           |
-| Remove Urls                                | Remove Multiple Spaces                | Remove Accented Characters |
-| Leammatize                                 | Stemming                              |                            |
+| Features                                   | Features                              | Features                         |
+| ------------------------------------------ | ------------------------------------- | -------------------------------- |
+| Drop Null Rows                             | Lower all Words                       | Contraction to Expansion         |
+| Removal of emojis                          | Removal of emoticons                  | Conversion of emoticons to words |
+| Count Urls                                 | Get Word Count                        | Count Mails                      |
+| Conversion of emojis to words              | Remove Numbers and Alphanumeric words | Remove Stop Words                |
+| Remove Special Characters and Punctuations | Remove Mails                          | Remove Html Tags                 |
+| Remove Urls                                | Remove Multiple Spaces                | Remove Accented Characters       |
+| Leammatize                                 | Stemming                              |                                  |
 
 **Code Implementation**
 

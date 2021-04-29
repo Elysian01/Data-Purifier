@@ -15,8 +15,11 @@ from bs4 import BeautifulSoup
 from nltk.stem.porter import PorterStemmer
 
 from .contractions import CONTRACTIONS
+from .emoticons import EMOTICONS
+from .emoji import UNICODE_EMO
 from datapurifier.decorators import *
 from datapurifier.widgets import Widgets
+from datapurifier.utils import *
 ps = PorterStemmer()
 
 
@@ -32,8 +35,8 @@ class Nlpurifier:
 
     def __start_purifying(self, e):
 
-        print(
-            colored(f"Dataframe contains {self.df.shape[0]} rows and {self.df.shape[1]} columns\n", "blue", attrs=["bold"]))
+        print_in_blue(
+            f"Dataframe contains {self.df.shape[0]} rows and {self.df.shape[1]} columns\n")
 
         if self.purifier_widgets["dropna"]:
             self.drop_null_rows()
@@ -60,12 +63,30 @@ class Nlpurifier:
             self.remove_multiple_spaces()
         if self.purifier_widgets["remove_accented"]:
             self.remove_accented_chars()
-        # if self.purifier_widgets["remove_words"]:
-        #     self.remove_words()
+
         if self.purifier_widgets["remove_stop_words"]:
             self.remove_stop_words()
         if self.purifier_widgets["remove_special_and_punct"]:
             self.remove_special_and_punctions()
+
+        if self.purifier_widgets["convert_emojis_to_word"]:
+            self.convert_emojis_to_word()
+        if self.purifier_widgets["convert_emoticons_to_word"]:
+            self.convert_emoticons_to_word()
+
+        if self.purifier_widgets["remove_emojis"]:
+            if self.purifier_widgets["convert_emojis_to_word"]:
+                print_in_red(
+                    "'Remove Emojis' action is skipped because, all the emojis are converted to words.")
+            else:
+                self.remove_emojis()
+
+        if self.purifier_widgets["remove_emoticons"]:
+            if self.purifier_widgets["convert_emoticons_to_word"]:
+                print_in_red(
+                    "'Remove Emoticons' action is skipped because, all the emoticons are converted to words.")
+            else:
+                self.remove_emoticons()
 
         if self.purifier_widgets["lemma"]:
             self.leammatize()
@@ -89,6 +110,16 @@ class Nlpurifier:
         self.count_urls_widget = self.widget.checkbox(description='Count Urls')
         self.word_count_widget = self.widget.checkbox(
             description='Get Word Count')
+
+        self.remove_emojis_widget = self.widget.checkbox(
+            description='Remove Emojis')
+        self.remove_emoticons_widget = self.widget.checkbox(
+            description='Remove Emoticons')
+        self.convert_emoticons_to_word_widget = self.widget.checkbox(
+            description='Conversion of Emoticons to Words')
+        self.convert_emojis_to_word_widget = self.widget.checkbox(
+            description='Conversion of Emojis to Words')
+
         self.remove_stop_words_widget = self.widget.checkbox(
             description='Remove Stop Words')
         self.remove_special_and_punct_widget = self.widget.checkbox(
@@ -103,8 +134,7 @@ class Nlpurifier:
             description='Remove Accented Characters')
         self.remove_urls_widget = self.widget.checkbox(
             description='Remove Urls')
-        self.remove_words_widget = self.widget.checkbox(
-            description='Remove Commonly Occuring Words')
+
         self.lemma_widget = self.widget.checkbox(description='Leammatize')
         self.stem_widget = self.widget.checkbox(description='Stemming')
 
@@ -113,14 +143,16 @@ class Nlpurifier:
             [self.count_urls_widget, self.word_count_widget, self.count_mail_widget],
             [self.remove_special_and_punct_widget, self.remove_numbers_widget,
                 self.remove_stop_words_widget],
-            [self.remove_words_widget,
+            [self.remove_accented_widget,
                 self.remove_mail_widget, self.remove_html_widget],
-            [self.remove_urls_widget, self.remove_spaces_widget,
-                self.remove_accented_widget],
+            [self.remove_urls_widget, self.remove_spaces_widget, self.convert_emojis_to_word_widget
+             ],
+            [self.remove_emojis_widget, self.remove_emoticons_widget,
+                self.convert_emoticons_to_word_widget],
             [self.lemma_widget, self.stem_widget]
         ]
 
-        grid_rows = 6
+        grid_rows = len(items)
         grid_cols = 3
         grid = GridspecLayout(grid_rows, grid_cols)
         for i in range(len(items)):
@@ -133,7 +165,9 @@ class Nlpurifier:
                                          'remove_numbers': self.remove_numbers_widget, 'remove_stop_words': self.remove_stop_words_widget,
                                          'remove_special_and_punct': self.remove_special_and_punct_widget, 'remove_mail': self.remove_mail_widget,
                                          'remove_html': self.remove_html_widget, 'remove_urls': self.remove_urls_widget, 'remove_spaces': self.remove_spaces_widget,
-                                         'remove_accented': self.remove_accented_widget, 'remove_words': self.remove_words_widget, 'lemma': self.lemma_widget, 'stem': self.stem_widget})
+                                         'remove_accented': self.remove_accented_widget, 'convert_emojis_to_word': self.convert_emojis_to_word_widget,
+                                         'remove_emojis': self.remove_emojis_widget, 'remove_emoticons': self.remove_emoticons_widget, 'convert_emoticons_to_word': self.convert_emoticons_to_word_widget,
+                                         'lemma': self.lemma_widget, 'stem': self.stem_widget})
 
         display(grid)
 
@@ -145,7 +179,7 @@ class Nlpurifier:
                               count_urls, word_count, remove_numbers, remove_stop_words,
                               remove_special_and_punct, remove_mail, remove_html,
                               remove_urls, remove_spaces, remove_accented,
-                              remove_words, lemma, stem):
+                              convert_emojis_to_word, remove_emojis, remove_emoticons, convert_emoticons_to_word, lemma, stem):
 
         self.purifier_widgets["dropna"] = True if dropna else False
         self.purifier_widgets["lower"] = True if lower else False
@@ -161,7 +195,10 @@ class Nlpurifier:
         self.purifier_widgets["remove_urls"] = True if remove_urls else False
         self.purifier_widgets["remove_spaces"] = True if remove_spaces else False
         self.purifier_widgets["remove_accented"] = True if remove_accented else False
-        self.purifier_widgets["remove_words"] = True if remove_words else False
+        self.purifier_widgets["convert_emojis_to_word"] = True if convert_emojis_to_word else False
+        self.purifier_widgets["remove_emojis"] = True if remove_emojis else False
+        self.purifier_widgets["remove_emoticons"] = True if remove_emoticons else False
+        self.purifier_widgets["convert_emoticons_to_word"] = True if convert_emoticons_to_word else False
         self.purifier_widgets["lemma"] = True if lemma else False
         self.purifier_widgets["stem"] = True if stem else False
 
@@ -170,8 +207,8 @@ class Nlpurifier:
         if target in self.df.columns:
             self.target = target
         else:
-            print(colored(
-                "Please provide correct `target` column name, containing only textual data for analysis", "red", attrs=["bold"]))
+            print_in_red(
+                "Please provide correct `target` column name, containing only textual data for analysis")
             sys.exit(1)
 
     def get_text(self):
@@ -186,8 +223,7 @@ class Nlpurifier:
             print("Dropping rows having [' ', 'NULL', numpy.nan] values")
             self.df.dropna(inplace=True)
             self.df.reset_index(drop=True, inplace=True)
-            print(
-                colored(f"Total Null rows dropped: {total_null_rows}\n", "red", attrs=["bold"]))
+            print_in_red(f"Total Null rows dropped: {total_null_rows}\n")
         else:
             print(colored("There is no null rows present.\n", "green"))
 
@@ -271,6 +307,56 @@ class Nlpurifier:
         text = text.split()
         self.word_count = pd.Series(text).value_counts()
         print("type <obj>.word_count for getting word count series")
+
+    def __remove_emoji(self, x: str):
+        """Removes Emoji Lambda Function
+        Reference : https://gist.github.com/slowkow/7a7f61f495e3dbb7e3d767f97bd7304b"""
+        emoji_pattern = re.compile("["
+                                   u"\U0001F600-\U0001F64F"  # emoticons
+                                   u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+                                   u"\U0001F680-\U0001F6FF"  # transport & map symbols
+                                   u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                                   u"\U00002702-\U000027B0"
+                                   u"\U000024C2-\U0001F251"
+                                   "]+", flags=re.UNICODE)
+        return emoji_pattern.sub(r'', x)
+
+    @timer_and_exception_handler
+    def remove_emojis(self):
+        self.df[self.target] = self.df[self.target].apply(
+            lambda x: self.__remove_emoji(x))
+
+    def __remove_emoticons(self, x: str):
+        emoticon_pattern = re.compile(
+            u'(' + u'|'.join(k for k in EMOTICONS) + u')')
+        return emoticon_pattern.sub(r'', x)
+
+    @timer_and_exception_handler
+    def remove_emoticons(self):
+        self.df[self.target] = self.df[self.target].apply(
+            lambda x: self.__remove_emoticons(x))
+
+    def __convert_emoticons_to_word(self, text: str):
+        for emot in EMOTICONS:
+            text = re.sub(
+                u'('+emot+')', "_".join(EMOTICONS[emot].replace(",", "").split()), text)
+        return text
+
+    @timer_and_exception_handler
+    def convert_emoticons_to_word(self):
+        self.df[self.target] = self.df[self.target].apply(
+            lambda x: self.__convert_emoticons_to_word(x))
+
+    def __convert_emojis_to_word(self, text: str):
+        for emot in UNICODE_EMO:
+            text = re.sub(
+                r'('+emot+')', "_".join(UNICODE_EMO[emot].replace(",", "").replace(":", "").split()), text)
+        return text
+
+    @timer_and_exception_handler
+    def convert_emojis_to_word(self):
+        self.df[self.target] = self.df[self.target].apply(
+            lambda x: self.__convert_emojis_to_word(x))
 
     @timer_and_exception_handler
     def remove_words(self, word_list):

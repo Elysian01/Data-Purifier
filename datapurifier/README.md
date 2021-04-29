@@ -41,8 +41,13 @@
 
 ## Cleaning
 
-- [ ] Removing Emoji
+- [x] Removing Emoji
+- [x] Removal of emoticons
+- [x] Conversion of emoticons to words
+- [x] Conversion of emojis to words
 - [ ] Radio-button for lemmatization and stemming
+- [ ] Removal of Frequent words
+- [ ] Removal of Rare words
 
 ## Analysis
 - [ ] LDA

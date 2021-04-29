@@ -67,18 +67,18 @@ ae
    4. Stop Word Count
    5. Uppercase Word Count
 
-Later you can also observe distribution of above mentioned analysis just by selecting the column from dropdown list, and our system will automatically plot it.
+Later you can also observe distribution of above mentioned analysis just by selecting the column from the dropdown list, and our system will automatically plot it.
 
 * It can also perform `sentiment analysis` on dataframe row by row, giving the polarity of each sentence (or row), later you can also view the `distribution of polarity`.
 
 **Word Analysis**
 
-* Can find count of `specific word` mentioned by the user
+* Can find count of `specific word` mentioned by the user in the textbox.
 * Plots `wordcloud plot`
-* Perform `Unigram, Bigram, and Trigram analysis`, returning the dataframe of each and also showing its distribution plot.
+* Perform `Unigram, Bigram, and Trigram` analysis, returning the dataframe of each and also showing its respective distribution plot.
+
 
 **Code Implementation**
-
 
 For Automated EDA and Automated Data Cleaning of NL dataset, load the dataset and pass the dataframe along with the targeted column containing textual data.
 

@@ -25,6 +25,8 @@ import cufflinks as cf
 from plotly.offline import iplot
 from sklearn.feature_extraction.text import CountVectorizer
 
+from datapurifier.utils import *
+
 # plt.style.use('ggplot')
 py.offline.init_notebook_mode(connected=True)
 cf.go_offline()
@@ -56,8 +58,8 @@ class Nlpeda:
         if target in self.df.columns:
             self.target = target
         else:
-            print(colored(
-                "Please provide correct `target` column name, containing only textual data for analysis", "red", attrs=["bold"]))
+            print_in_red(
+                "Please provide correct `target` column name, containing only textual data for analysis")
             sys.exit(1)
 
     def __start_analysis(self):
@@ -97,8 +99,8 @@ class Nlpeda:
         return self.text, self.word_list, self.word_count
 
     def print_shape(self):
-        print(
-            colored(f"Dataframe contains {self.df.shape[0]} rows and {self.df.shape[1]} columns\n", "blue", attrs=["bold"]))
+        print_in_blue(
+            f"Dataframe contains {self.df.shape[0]} rows and {self.df.shape[1]} columns\n")
 
     def get_avg_word_len(self, x: str) -> float:
         words = x.split()
@@ -144,8 +146,7 @@ class Nlpeda:
                 self.df.dropna(inplace=True)
                 self.df.reset_index(drop=True, inplace=True)
                 self.null_values_present = False
-                print(
-                    colored(f"Total Null rows dropped: {total_null_rows}\n", "red", attrs=["bold"]))
+                print_in_red(f"Total Null rows dropped: {total_null_rows}\n")
                 self.__start_analysis()
             else:
                 print(colored("There is no null rows present.\n", "green"))
@@ -216,7 +217,7 @@ class Nlpeda:
     def distribution_plot(self):
         """Plots Distribution Plot of various columns in dataframe"""
 
-        print(colored("\nDistribution Analysis:", "red", attrs=["bold"]))
+        print_in_red("\nDistribution Analysis:")
         col = self.df.columns.tolist()
         col.remove(self.target)
         column_dropdown = self.widget.dropdown(
@@ -260,7 +261,7 @@ class Nlpeda:
 
     @exception_handler
     def plot_wordcloud(self):
-        print(colored("Plot Wordcloud: ", "blue", attrs=["bold"]))
+        print_in_blue("Plot Wordcloud: ")
         interact(self.__perform_wordcloud_visualization, condition=widgets.Checkbox(
             description="Plot Wordcloud"))
 
@@ -314,7 +315,8 @@ class Nlpeda:
 
             unigram_button = widgets.Button(
                 description='Start Analysis',
-                tooltip='Start Unigram Analysis'
+                tooltip='Start Unigram Analysis',
+                button_style='info'
             )
 
             unigram_button.on_click(self.__start_unigram)
@@ -322,7 +324,7 @@ class Nlpeda:
 
     @exception_handler
     def unigram_statistics(self):
-        print(colored("Unigram Analysis: ", "blue", attrs=["bold"]))
+        print_in_blue("Unigram Analysis: ")
         interact(self.__perform_unigram, condition=widgets.Checkbox(
             description="Perform Unigram"))
 
@@ -362,7 +364,8 @@ class Nlpeda:
 
             bigram_button = widgets.Button(
                 description='Start Analysis',
-                tooltip='Start Bigram Analysis'
+                tooltip='Start Bigram Analysis',
+                button_style='info'
             )
 
             bigram_button.on_click(self.__start_bigram)
@@ -370,7 +373,7 @@ class Nlpeda:
 
     @exception_handler
     def bigram_statistics(self):
-        print(colored("Bigram Analysis: ", "blue", attrs=["bold"]))
+        print_in_blue("Bigram Analysis: ")
         interact(self.__perform_bigram, condition=widgets.Checkbox(
             description="Perform Bigram"))
 
@@ -409,7 +412,8 @@ class Nlpeda:
 
             trigram_button = widgets.Button(
                 description='Start Analysis',
-                tooltip='Start Trigram Analysis'
+                tooltip='Start Trigram Analysis',
+                button_style='info'
             )
 
             trigram_button.on_click(self.__start_trigram)
@@ -417,7 +421,7 @@ class Nlpeda:
 
     @exception_handler
     def trigram_statistics(self):
-        print(colored("Trigram Analysis: ", "blue", attrs=["bold"]))
+        print_in_blue("Trigram Analysis: ")
         interact(self.__perform_trigram, condition=widgets.Checkbox(
             description="Perform Trigram"))
 
@@ -461,7 +465,7 @@ class Nlpeda:
 
     @exception_handler
     def ngram_plot(self):
-        print(colored("Plot Ngram Plots: ", "blue", attrs=["bold"]))
+        print_in_blue("Plot Ngram Plots: ")
         interact(self.__perform_ngram, condition=widgets.Checkbox(
             description="Start Plotting"))
 
