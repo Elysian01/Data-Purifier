@@ -35,12 +35,10 @@
   - [x] Total words which occur one, two or 3 times only
 - [x] Top Word (Visulize it via word cloud)
 - [x] Given the word, finds it count
-- [ ] Check For
-  - [ ] Emoji
-    - [ ] Give a list of emoji present and perform a sentiment analysis on that.
 
 ## Cleaning
 
+[notebook reference](https://www.kaggle.com/sudalairajkumar/getting-started-with-text-preprocessing#Introduction)
 - [x] Removing Emoji
 - [x] Removal of emoticons
 - [x] Conversion of emoticons to words
@@ -63,6 +61,8 @@
 - [ ] Encoding categorical values
 
 ## Automated Visualization
+
+- [ ] Perform Automated Data Visualization
 
 ## Reference
 

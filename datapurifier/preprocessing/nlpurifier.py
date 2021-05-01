@@ -14,9 +14,9 @@ from bs4 import BeautifulSoup
 
 from nltk.stem.porter import PorterStemmer
 
-from .contractions import CONTRACTIONS
-from .emoticons import EMOTICONS
-from .emoji import UNICODE_EMO
+from datapurifier.preprocessing.data_dict.contractions import CONTRACTIONS
+from datapurifier.preprocessing.data_dict.emoticons import EMOTICONS
+from datapurifier.preprocessing.data_dict.emoji import UNICODE_EMO
 from datapurifier.decorators import *
 from datapurifier.widgets import Widgets
 from datapurifier.utils import *
