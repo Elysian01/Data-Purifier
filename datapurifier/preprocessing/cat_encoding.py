@@ -14,6 +14,8 @@ from sklearn.preprocessing import LabelEncoder, LabelBinarizer, OneHotEncoder
 class CatEncoding:
     def __init__(self, df, categorical_features, encoding_type, handle_na=False):
         """
+
+        Arguments:
         df: pandas dataframe
         categorical_features: list of column names, e.g. ["ord_1", "nom_0"......]
         encoding_type: label, binary, ohe

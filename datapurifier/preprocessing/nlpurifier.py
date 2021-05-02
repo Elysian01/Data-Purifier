@@ -211,6 +211,12 @@ class Nlpurifier:
                 "Please provide correct `target` column name, containing only textual data for analysis")
             sys.exit(1)
 
+    """
+    --------------------------------------------------------------------------
+    Code for Nlp Purification Methods Starts
+    --------------------------------------------------------------------------
+    """
+
     def get_text(self):
         self.text = " ".join(self.df[self.target])
         return self.text
