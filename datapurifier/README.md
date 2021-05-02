@@ -44,8 +44,8 @@
 - [x] Conversion of emoticons to words
 - [x] Conversion of emojis to words
 - [x] Radio-button for lemmatization and stemming
-- [ ] Removal of Frequent words
-- [ ] Removal of Rare words
+- [x] Removal of Frequent words
+- [x] Removal of Rare words
 
 ## Analysis
 - [ ] LDA

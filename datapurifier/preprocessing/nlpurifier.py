@@ -33,6 +33,7 @@ class Nlpurifier:
         self.widget = Widgets()
 
         self.purifier_widgets = {}
+        self.word_count_series = pd.Series()
         self._show_widgets()
 
     def _start_purifying(self, e):
@@ -69,6 +70,31 @@ class Nlpurifier:
         if self.purifier_widgets["remove_stop_words"]:
             self.remove_stop_words()
 
+        if self.most_common_word_range:
+            word_range = self.most_common_word_range
+            if self.word_count_series.empty:
+                self.generate_word_count_series()
+                print_in_blue(
+                    "To see pandas series of word and their respective count, type '<obj>.word_count_series'\n")
+
+            print_in_blue(f"Removing top {word_range} words from dataframe")
+            word_list = self.word_count_series[:word_range].index.tolist()
+            print("Which are: ", word_list)
+            self.remove_words(word_list)
+
+        if self.most_rare_word_range:
+            word_range = self.most_rare_word_range
+            if self.word_count_series.empty:
+                self.generate_word_count_series()
+                print_in_blue(
+                    "To see pandas series of word and their respective count, type '<obj>.word_count_series'\n")
+
+            print_in_blue(
+                f"Removing top {word_range} rare words from dataframe")
+            word_list = self.word_count_series[-word_range:].index.tolist()
+            print("Which are: ", word_list)
+            self.remove_words(word_list)
+
         if self.purifier_widgets["convert_emojis_to_word"]:
             self.convert_emojis_to_word()
         if self.purifier_widgets["convert_emoticons_to_word"]:
@@ -103,6 +129,57 @@ class Nlpurifier:
 
     def _set_root_word_technique(self, technique):
         self.purifier_widgets["root_word_technique"] = technique
+
+    def _set_most_common_word_range(self, common_range: int) -> None:
+        self.most_common_word_range = common_range
+        print_in_red(f"Top {common_range} most common words will be removed")
+
+    def _most_common_words_widget(self, condition):
+        if condition:
+            print("The top words maybe frequent 'Stop Words' and they will be removed instead of actual words, to avoid this consider ticking 'Remove Stop Words' checkbox")
+
+            interact(self._set_most_common_word_range,
+                     common_range=widgets.IntSlider(min=1, max=100, step=1, value=10, description="Word Range:"))
+        else:
+            self.most_common_word_range = None
+        print("-"*50)
+
+    def _set_most_rare_word_range(self, rare_range: int) -> None:
+        self.most_rare_word_range = rare_range
+        print_in_red(f"Top {rare_range} most rare words will be removed")
+
+    def _most_rare_words_widget(self, condition):
+        if condition:
+            interact(self._set_most_rare_word_range,
+                     rare_range=widgets.IntSlider(min=1, max=100, step=1, value=10, description="Word Range:"))
+        else:
+            self.most_rare_word_range = None
+        print("-"*50)
+
+    def _widget_interactions(self, dropna, lower, contraction, count_mail,
+                             count_urls, word_count, remove_numbers, remove_stop_words,
+                             remove_special_and_punct, remove_mail, remove_html,
+                             remove_urls, remove_spaces, remove_accented,
+                             convert_emojis_to_word, remove_emojis, remove_emoticons, convert_emoticons_to_word):
+
+        self.purifier_widgets["dropna"] = True if dropna else False
+        self.purifier_widgets["lower"] = True if lower else False
+        self.purifier_widgets["contraction"] = True if contraction else False
+        self.purifier_widgets["count_mail"] = True if count_mail else False
+        self.purifier_widgets["count_urls"] = True if count_urls else False
+        self.purifier_widgets["word_count"] = True if word_count else False
+        self.purifier_widgets["remove_numbers"] = True if remove_numbers else False
+        self.purifier_widgets["remove_stop_words"] = True if remove_stop_words else False
+        self.purifier_widgets["remove_special_and_punct"] = True if remove_special_and_punct else False
+        self.purifier_widgets["remove_mail"] = True if remove_mail else False
+        self.purifier_widgets["remove_html"] = True if remove_html else False
+        self.purifier_widgets["remove_urls"] = True if remove_urls else False
+        self.purifier_widgets["remove_spaces"] = True if remove_spaces else False
+        self.purifier_widgets["remove_accented"] = True if remove_accented else False
+        self.purifier_widgets["convert_emojis_to_word"] = True if convert_emojis_to_word else False
+        self.purifier_widgets["remove_emojis"] = True if remove_emojis else False
+        self.purifier_widgets["remove_emoticons"] = True if remove_emoticons else False
+        self.purifier_widgets["convert_emoticons_to_word"] = True if convert_emoticons_to_word else False
 
     def _show_widgets(self):
 
@@ -185,35 +262,20 @@ class Nlpurifier:
         interact(self._set_root_word_technique,
                  technique=self.root_word_widget)
 
+        # Widget for removing most common words
+        print_in_red("Remove Top Common Words")
+        interact(self._most_common_words_widget, condition=widgets.Checkbox(
+            description="Remove Top Common Words"))
+
+        # Widget for removing most rare words
+        print_in_red("Remove Top Rare Words")
+        interact(self._most_rare_words_widget, condition=widgets.Checkbox(
+            description="Remove Top Rare Words"))
+
         # Button For Start Purifying
         start_btn = widgets.Button(description="Start Purifying")
         start_btn.on_click(self._start_purifying)
         display(start_btn)
-
-    def _widget_interactions(self, dropna, lower, contraction, count_mail,
-                             count_urls, word_count, remove_numbers, remove_stop_words,
-                             remove_special_and_punct, remove_mail, remove_html,
-                             remove_urls, remove_spaces, remove_accented,
-                             convert_emojis_to_word, remove_emojis, remove_emoticons, convert_emoticons_to_word):
-
-        self.purifier_widgets["dropna"] = True if dropna else False
-        self.purifier_widgets["lower"] = True if lower else False
-        self.purifier_widgets["contraction"] = True if contraction else False
-        self.purifier_widgets["count_mail"] = True if count_mail else False
-        self.purifier_widgets["count_urls"] = True if count_urls else False
-        self.purifier_widgets["word_count"] = True if word_count else False
-        self.purifier_widgets["remove_numbers"] = True if remove_numbers else False
-        self.purifier_widgets["remove_stop_words"] = True if remove_stop_words else False
-        self.purifier_widgets["remove_special_and_punct"] = True if remove_special_and_punct else False
-        self.purifier_widgets["remove_mail"] = True if remove_mail else False
-        self.purifier_widgets["remove_html"] = True if remove_html else False
-        self.purifier_widgets["remove_urls"] = True if remove_urls else False
-        self.purifier_widgets["remove_spaces"] = True if remove_spaces else False
-        self.purifier_widgets["remove_accented"] = True if remove_accented else False
-        self.purifier_widgets["convert_emojis_to_word"] = True if convert_emojis_to_word else False
-        self.purifier_widgets["remove_emojis"] = True if remove_emojis else False
-        self.purifier_widgets["remove_emoticons"] = True if remove_emoticons else False
-        self.purifier_widgets["convert_emoticons_to_word"] = True if convert_emoticons_to_word else False
 
     def _set_df_and_target(self, df, target):
         self.df = df.copy()
@@ -225,9 +287,9 @@ class Nlpurifier:
             sys.exit(1)
 
     """
-    --------------------------------------------------------------------------
+    ###############################################################################################
     Code for Nlp Purification Methods Starts
-    --------------------------------------------------------------------------
+    ###############################################################################################
     """
 
     def get_text(self):
@@ -376,6 +438,12 @@ class Nlpurifier:
     def convert_emojis_to_word(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._convert_emojis_to_word(x))
+
+    def generate_word_count_series(self):
+        """Generate pandas series for word counts, to access type '<obj>.word_count_series'"""
+        text = " ".join(self.df[self.target])
+        text = text.split()
+        self.word_count_series = pd.Series(text).value_counts()
 
     @ timer_and_exception_handler
     def remove_words(self, word_list):
