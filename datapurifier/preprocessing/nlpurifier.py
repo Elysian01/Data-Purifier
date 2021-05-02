@@ -5,6 +5,7 @@ import unicodedata
 import numpy as np
 import pandas as pd
 import ipywidgets as widgets
+from ipywidgets import interact
 from ipywidgets import GridspecLayout
 
 from termcolor import colored
@@ -27,6 +28,7 @@ class Nlpurifier:
 
     def __init__(self: str, df: pd.DataFrame, target: str, spacy_model="en_core_web_sm"):
         self._set_df_and_target(df, target)
+        self.spacy_model = spacy_model
         self.nlp = spacy.load(spacy_model)
         self.widget = Widgets()
 
@@ -89,13 +91,18 @@ class Nlpurifier:
         if self.purifier_widgets["remove_special_and_punct"]:
             self.remove_special_and_punctions()
 
-        if self.purifier_widgets["lemma"]:
-            self.leammatize()
-        if self.purifier_widgets["stem"]:
-            self.stemming()
+        if self.purifier_widgets["root_word_technique"]:
+            technique = self.purifier_widgets["root_word_technique"]
+            if technique == "Stemming":
+                self.stemming()
+            if technique == "Lemmatization":
+                self.leammatize()
 
         print(colored("\nPurifying Completed!\n", "green", attrs=["bold"]))
         print("type <obj>.df to access processed and purified dataframe")
+
+    def _set_root_word_technique(self, technique):
+        self.purifier_widgets["root_word_technique"] = technique
 
     def _show_widgets(self):
 
@@ -136,9 +143,6 @@ class Nlpurifier:
         self.remove_urls_widget = self.widget.checkbox(
             description='Remove Urls')
 
-        self.lemma_widget = self.widget.checkbox(description='Leammatize')
-        self.stem_widget = self.widget.checkbox(description='Stemming')
-
         items = [
             [self.dropna_widget, self.lower_widget, self.contraction_widget],
             [self.count_urls_widget, self.word_count_widget, self.count_mail_widget],
@@ -149,8 +153,7 @@ class Nlpurifier:
             [self.remove_urls_widget, self.remove_spaces_widget, self.convert_emojis_to_word_widget
              ],
             [self.remove_emojis_widget, self.remove_emoticons_widget,
-                self.convert_emoticons_to_word_widget],
-            [self.lemma_widget, self.stem_widget]
+                self.convert_emoticons_to_word_widget]
         ]
 
         grid_rows = len(items)
@@ -167,11 +170,22 @@ class Nlpurifier:
                                         'remove_special_and_punct': self.remove_special_and_punct_widget, 'remove_mail': self.remove_mail_widget,
                                         'remove_html': self.remove_html_widget, 'remove_urls': self.remove_urls_widget, 'remove_spaces': self.remove_spaces_widget,
                                         'remove_accented': self.remove_accented_widget, 'convert_emojis_to_word': self.convert_emojis_to_word_widget,
-                                        'remove_emojis': self.remove_emojis_widget, 'remove_emoticons': self.remove_emoticons_widget, 'convert_emoticons_to_word': self.convert_emoticons_to_word_widget,
-                                        'lemma': self.lemma_widget, 'stem': self.stem_widget})
+                                        'remove_emojis': self.remove_emojis_widget, 'remove_emoticons': self.remove_emoticons_widget, 'convert_emoticons_to_word': self.convert_emoticons_to_word_widget
+                                        })
 
+        # Displaying all methods in grid layout
         display(grid)
 
+        # Display Root Word Widget
+        print_in_blue("\nConvert Word to its Base Form")
+        self.root_word_widget = widgets.RadioButtons(
+            options=['None', 'Stemming', 'Lemmatization'],
+            description="Technique:"
+        )
+        interact(self._set_root_word_technique,
+                 technique=self.root_word_widget)
+
+        # Button For Start Purifying
         start_btn = widgets.Button(description="Start Purifying")
         start_btn.on_click(self._start_purifying)
         display(start_btn)
@@ -180,7 +194,7 @@ class Nlpurifier:
                              count_urls, word_count, remove_numbers, remove_stop_words,
                              remove_special_and_punct, remove_mail, remove_html,
                              remove_urls, remove_spaces, remove_accented,
-                             convert_emojis_to_word, remove_emojis, remove_emoticons, convert_emoticons_to_word, lemma, stem):
+                             convert_emojis_to_word, remove_emojis, remove_emoticons, convert_emoticons_to_word):
 
         self.purifier_widgets["dropna"] = True if dropna else False
         self.purifier_widgets["lower"] = True if lower else False
@@ -200,8 +214,6 @@ class Nlpurifier:
         self.purifier_widgets["remove_emojis"] = True if remove_emojis else False
         self.purifier_widgets["remove_emoticons"] = True if remove_emoticons else False
         self.purifier_widgets["convert_emoticons_to_word"] = True if convert_emoticons_to_word else False
-        self.purifier_widgets["lemma"] = True if lemma else False
-        self.purifier_widgets["stem"] = True if stem else False
 
     def _set_df_and_target(self, df, target):
         self.df = df.copy()
@@ -234,26 +246,26 @@ class Nlpurifier:
         else:
             print(colored("There is no null rows present.\n", "green"))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def lower(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: x.lower())
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_numbers(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: re.sub(r'[0-9]', '', x))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_special_and_punctions(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: re.sub('[^A-Z a-z 0-9-]+', "", x))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_multiple_spaces(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: " ".join(x.split()))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_html_tags(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: BeautifulSoup(x, 'html.parser').get_text())
@@ -267,7 +279,7 @@ class Nlpurifier:
         else:
             return x
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def contraction_to_expansion(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._contraction_to_expansion(x))
@@ -277,38 +289,38 @@ class Nlpurifier:
             'ascii', 'ignore').decode('utf-8', 'ignore')
         return x
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_accented_chars(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._remove_accented_chars(x))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_stop_words(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: " ".join(
             [word for word in x.split() if word not in STOP_WORDS]))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def count_emails(self):
         self.df['emails'] = self.df[self.target].apply(lambda x: re.findall(
             r'([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)', x))
         self.df["emails_counts"] = self.df["emails"].apply(lambda x: len(x))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_emails(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: re.sub(
             r'([a-zA-Z0-9+._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)', "", x))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def count_urls(self):
         self.df["urls_counts"] = self.df[self.target].apply(lambda x: len(re.findall(
             r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?', x)))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_urls(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: re.sub(
             r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?', "", x))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def get_word_count(self):
         text = self.get_text()
         text = text.split()
@@ -328,7 +340,7 @@ class Nlpurifier:
                                    "]+", flags=re.UNICODE)
         return emoji_pattern.sub(r'', x)
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_emojis(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._remove_emoji(x))
@@ -338,7 +350,7 @@ class Nlpurifier:
             u'(' + u'|'.join(k for k in EMOTICONS) + u')')
         return emoticon_pattern.sub(r'', x)
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_emoticons(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._remove_emoticons(x))
@@ -349,7 +361,7 @@ class Nlpurifier:
                 u'('+emot+')', "_".join(EMOTICONS[emot].replace(",", "").split()), text)
         return text
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def convert_emoticons_to_word(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._convert_emoticons_to_word(x))
@@ -360,12 +372,12 @@ class Nlpurifier:
                 r'('+emot+')', "_".join(UNICODE_EMO[emot].replace(",", "").replace(":", "").split()), text)
         return text
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def convert_emojis_to_word(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._convert_emojis_to_word(x))
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def remove_words(self, word_list):
         """Removes words which are in word list
 
@@ -387,17 +399,17 @@ class Nlpurifier:
             lem += token.lemma_ + " "
         return lem
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def leammatize(self):
-        print(f"""Internally for lemmatization it uses {self.nlp} spacy model,
-              to change it please provide `spacy_model='your_model' in constructor`""")
+        print(
+            f"Internally for lemmatization it uses '{self.spacy_model}' spacy model,\nto change it please provide `spacy_model='your_model' in constructor`")
         self.df[self.target] = self.df[self.target].apply(
             lambda x: self._lemmatize(x))
 
     def _stemming(self, x):
         return " ".join([ps.stem(word) for word in x.split()])
 
-    @timer_and_exception_handler
+    @ timer_and_exception_handler
     def stemming(self):
         print("Using Porter Stemmer for stemming")
         self.df[self.target] = self.df[self.target].apply(
