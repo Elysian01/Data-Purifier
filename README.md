@@ -110,7 +110,7 @@ eda.unigram_df # for seeing unigram datfarame
 
 ### Automated Data Cleaning for NLP
 
-It provides following cleaning techniques, where you have to just tick the checkbox and our system will automatically perform the operation for you.
+* It provides following cleaning techniques, where you have to just tick the checkbox and our system will automatically perform the operation for you.
 
 | Features                                   | Features                              | Features                         |
 | ------------------------------------------ | ------------------------------------- | -------------------------------- |
@@ -120,7 +120,15 @@ It provides following cleaning techniques, where you have to just tick the check
 | Conversion of emojis to words              | Remove Numbers and Alphanumeric words | Remove Stop Words                |
 | Remove Special Characters and Punctuations | Remove Mails                          | Remove Html Tags                 |
 | Remove Urls                                | Remove Multiple Spaces                | Remove Accented Characters       |
-| Leammatize                                 | Stemming                              |                                  |
+
+
+* You can convert word to its base form by selecting either `stemming` or `lemmatization` option.
+
+* Remove Top Common Word: By giving range of word, you can `remove top common word`
+  
+* Remove Top Rare Word: By giving range of word, you can `remove top rare word`
+
+After you are done, selecting your cleaning methods or techniques, click on `Start Purifying` button to let the magic begins. Upon its completion you can access the cleaned dataframe by `<obj>.df`
 
 **Code Implementation**
 
