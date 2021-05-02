@@ -42,24 +42,24 @@ class Mleda:
     """
 
     def __init__(self, df: pd.DataFrame):
-        self.__set_df(df)
-        self.__init_variable(df)
+        self._set_df(df)
+        self._init_variable(df)
 
         self.inference_summary = []
         self.widget = Widgets()
 
         self.shape(df)
         self.sample(df)
-        # results = self.__remove_unique_columns(df)
+        # results = self._remove_unique_columns(df)
         # if results[0]:
         #     df = df.drop(columns=results[1])
         self.statistics(df)
         self.visualize(df)
 
-    def __set_df(self, df):
+    def _set_df(self, df):
         self.df = df
 
-    def __init_variable(self, df):
+    def _init_variable(self, df):
         self.cat_cols = self.get_categorical_columns(df)
         self.num_cols = self.get_numerical_columns(df)
 
@@ -91,7 +91,7 @@ class Mleda:
         print(colored("\nSample of Dataframe:", "red", attrs=["bold"]))
         display(df.sample(num_or_rows))
 
-    def __remove_unique_columns(self, df, uniqueness_threshold: float = 0.8) -> list:
+    def _remove_unique_columns(self, df, uniqueness_threshold: float = 0.8) -> list:
         '''
         Removes columns having unique value more than 80% (uniqueness_threshold), like: ID, serial_no, etc
         '''
@@ -151,7 +151,7 @@ class Mleda:
             print(colored(
                 "\nCongrats!!, The Dataframe has NO NULL VALUES\n", "green", attrs=["bold"]))
 
-    def __value_counts_plot(self, column: str, n: int) -> None:
+    def _value_counts_plot(self, column: str, n: int) -> None:
 
         selected_columns = self.df[column].value_counts().index.tolist()[:n]
         selected_columns_count = self.df[column].value_counts().tolist()[:n]
@@ -177,7 +177,7 @@ class Mleda:
         '''
         Show Value count plots
         '''
-        self.__set_df(df)
+        self._set_df(df)
         print(colored("\nInteractive Value Count Plot:\n",
                       "red", attrs=["bold"]))
         columns = df.columns
@@ -190,11 +190,11 @@ class Mleda:
         value_count_ui = widgets.HBox(items)
 
         out = widgets.interactive_output(
-            self.__value_counts_plot, {'column': column_dropdown, 'n': top_columns})
+            self._value_counts_plot, {'column': column_dropdown, 'n': top_columns})
 
         display(value_count_ui, out)
 
-    def __pie_plot(self, column: str) -> None:
+    def _pie_plot(self, column: str) -> None:
         plt.figure(figsize=(10, 5))
         self.df[column].value_counts().plot.pie(
             autopct="%1.1f%%")
@@ -204,15 +204,15 @@ class Mleda:
         cat_columns = self.get_categorical_columns(df)
 
         if cat_columns:
-            self.__set_df(df)
+            self._set_df(df)
             print(colored("\nPie Plot:\n", "red", attrs=["bold"]))
 
             cat_column_dropdown = self.widget.dropdown(
                 cat_columns, cat_columns[0], "Columns:")
 
-            ipywidgets.interact(self.__pie_plot, column=cat_column_dropdown)
+            ipywidgets.interact(self._pie_plot, column=cat_column_dropdown)
 
-    def __plot_joinplot(self, x: str, y: str, kind: str, hue: str) -> None:
+    def _plot_joinplot(self, x: str, y: str, kind: str, hue: str) -> None:
         try:
             if hue:
                 sns.jointplot(x=x, y=y, kind=kind, hue=hue, data=self.df)
@@ -222,7 +222,7 @@ class Mleda:
             print(colored(f"Error: {e}", "red", attrs=["bold"]))
 
     def jointplot(self, df) -> None:
-        self.__set_df(df)
+        self._set_df(df)
         print(colored("\nJoint Plot:\n", "red", attrs=["bold"]))
 
         col = df.columns
@@ -244,7 +244,7 @@ class Mleda:
                  kind_dropdown, hue_dropdown]
 
         joint_plot_ui = widgets.HBox(items)
-        output = widgets.interactive_output(self.__plot_joinplot, {
+        output = widgets.interactive_output(self._plot_joinplot, {
                                             'x': column_dropdown1, 'y': column_dropdown2, 'kind': kind_dropdown, "hue": hue_dropdown})
 
         display(joint_plot_ui, output)
@@ -254,7 +254,7 @@ class Mleda:
         sns.heatmap(df.corr(), annot=True, linewidth=3)
         plt.show()
 
-    def __plot_pairplot(self, hue: str, plot_status: bool) -> None:
+    def _plot_pairplot(self, hue: str, plot_status: bool) -> None:
         if plot_status == True:
             if hue:
                 sns.pairplot(self.df, hue=hue)
@@ -273,13 +273,13 @@ class Mleda:
 
         items = [hue_dropdown, show_pairplot]
         pair_plot_ui = widgets.VBox(items)
-        output = widgets.interactive_output(self.__plot_pairplot, {
+        output = widgets.interactive_output(self._plot_pairplot, {
                                             'hue': hue_dropdown, 'plot_status': show_pairplot})
 
         display(pair_plot_ui, output)
 
     def visualize(self, df) -> None:
-        self.__set_df(df)
+        self._set_df(df)
         self.value_counts(df)
         self.jointplot(df)
         self.corr(df)

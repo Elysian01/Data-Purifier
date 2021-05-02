@@ -42,7 +42,7 @@ class Nlpeda:
     """Performs Automatic Exploratory Data Analysis for NLP datasets."""
 
     def __init__(self, df: pd.DataFrame, target: str, analyse="basic"):
-        self.__set_df_and_target(df, target)
+        self._set_df_and_target(df, target)
         self.analyse = analyse
         self.widget = Widgets()
 
@@ -51,9 +51,9 @@ class Nlpeda:
         self.null_values_present = True
         self.handle_null_values()
 
-        self.__start_analysis()
+        self._start_analysis()
 
-    def __set_df_and_target(self, df, target):
+    def _set_df_and_target(self, df, target):
         self.df = df.copy()
         if target in self.df.columns:
             self.target = target
@@ -62,7 +62,7 @@ class Nlpeda:
                 "Please provide correct `target` column name, containing only textual data for analysis")
             sys.exit(1)
 
-    def __start_analysis(self):
+    def _start_analysis(self):
         if not self.null_values_present:
 
             if self.analyse == "basic":
@@ -147,7 +147,7 @@ class Nlpeda:
                 self.df.reset_index(drop=True, inplace=True)
                 self.null_values_present = False
                 print_in_red(f"Total Null rows dropped: {total_null_rows}\n")
-                self.__start_analysis()
+                self._start_analysis()
             else:
                 print(colored("There is no null rows present.\n", "green"))
 
@@ -167,7 +167,7 @@ class Nlpeda:
                 "\nCongrats!!, The Dataframe has NO NULL VALUES\n", "green", attrs=["bold"]))
 
     @conditional_timer
-    def __distplot_for_sentiment(self, condition: str) -> None:
+    def _distplot_for_sentiment(self, condition: str) -> None:
         if condition:
             column = "polarity"
             plt.figure(figsize=(6, 4))
@@ -184,7 +184,7 @@ class Nlpeda:
                 lambda x: TextBlob(x).sentiment.polarity)
             display(self.df[[self.target, "polarity"]].head())
 
-            interact(self.__distplot_for_sentiment, condition=widgets.Checkbox(
+            interact(self._distplot_for_sentiment, condition=widgets.Checkbox(
                 description="Plot Sentiment Distribution"))
 
     @timer_and_exception_handler
@@ -209,7 +209,7 @@ class Nlpeda:
 
         display(self.df.head())
 
-    def __distplot(self, column: str) -> None:
+    def _distplot(self, column: str) -> None:
         if column:
             self.df[column].iplot(kind="hist", xTitle=column,
                                   yTitle="Count", title=column + " Distribution")
@@ -226,7 +226,7 @@ class Nlpeda:
         items = [column_dropdown]
 
         hist_plot_ui = widgets.HBox(items)
-        output = widgets.interactive_output(self.__distplot, {
+        output = widgets.interactive_output(self._distplot, {
                                             'column': column_dropdown})
 
         display(hist_plot_ui, output)
@@ -237,7 +237,7 @@ class Nlpeda:
     -------------------------------------------------------------------
     """
 
-    def __perform_word_count(self, word):
+    def _perform_word_count(self, word):
         if word:
             try:
                 print(
@@ -248,11 +248,11 @@ class Nlpeda:
     def find_word_count(self):
         print(colored("Enter Word and find its count: ",
               "blue", attrs=["bold"]))
-        interact(self.__perform_word_count, word=widgets.Text(
+        interact(self._perform_word_count, word=widgets.Text(
             placeholder="Enter Your word here", description="Word"))
 
     @exception_handler
-    def __perform_wordcloud_visualization(self, condition):
+    def _perform_wordcloud_visualization(self, condition):
         if condition:
             print("Please wait plotting wordcloud...")
             wc = WordCloud(width=1000, height=400).generate(self.text)
@@ -262,7 +262,7 @@ class Nlpeda:
     @exception_handler
     def plot_wordcloud(self):
         print_in_blue("Plot Wordcloud: ")
-        interact(self.__perform_wordcloud_visualization, condition=widgets.Checkbox(
+        interact(self._perform_wordcloud_visualization, condition=widgets.Checkbox(
             description="Plot Wordcloud"))
 
     def get_top_n_words(self, x, n: int, ngram_range: tuple, include_stop_words: bool = False):
@@ -282,13 +282,13 @@ class Nlpeda:
 
     # Unigram Analysis
 
-    def __unigram_interaction(self, top_unigram: int) -> None:
+    def _unigram_interaction(self, top_unigram: int) -> None:
         self.top_unigram = top_unigram
 
-    def __unigram_stop_word_interaction(self, condition: bool):
+    def _unigram_stop_word_interaction(self, condition: bool):
         self.unigram_stop_words = condition
 
-    def __start_unigram(self, e):
+    def _start_unigram(self, e):
         print(
             f"Please wait starting unigram word analysis for getting top {self.top_unigram} words...")
 
@@ -300,16 +300,16 @@ class Nlpeda:
         # display(self.unigram_df.head(3))
         print("Analysis Completed!, to view whole dataframe type 'obj.unigram_df'")
 
-    def __perform_unigram(self, condition: bool):
+    def _perform_unigram(self, condition: bool):
         if condition:
             top_unigram_widget = self.widget.int_slider(
                 minimum=1, maximum=100, step=1, value=10, description="Word Range:")
 
-            interact(self.__unigram_stop_word_interaction, condition=widgets.Checkbox(
+            interact(self._unigram_stop_word_interaction, condition=widgets.Checkbox(
                 description="Include Stop words in analysis"))
 
             widgets.interactive_output(
-                self.__unigram_interaction, {'top_unigram': top_unigram_widget})
+                self._unigram_interaction, {'top_unigram': top_unigram_widget})
 
             display(top_unigram_widget)
 
@@ -319,24 +319,24 @@ class Nlpeda:
                 button_style='info'
             )
 
-            unigram_button.on_click(self.__start_unigram)
+            unigram_button.on_click(self._start_unigram)
             display(unigram_button)
 
     @exception_handler
     def unigram_statistics(self):
         print_in_blue("Unigram Analysis: ")
-        interact(self.__perform_unigram, condition=widgets.Checkbox(
+        interact(self._perform_unigram, condition=widgets.Checkbox(
             description="Perform Unigram"))
 
     # Bigram Analysis
 
-    def __bigram_interaction(self, top_bigram: int) -> None:
+    def _bigram_interaction(self, top_bigram: int) -> None:
         self.top_bigram = top_bigram
 
-    def __bigram_stop_word_interaction(self, condition: bool):
+    def _bigram_stop_word_interaction(self, condition: bool):
         self.bigram_stop_words = condition
 
-    def __start_bigram(self, e):
+    def _start_bigram(self, e):
         print(
             f"Please wait starting Bigram word analysis for getting top {self.top_bigram} words...")
 
@@ -348,17 +348,17 @@ class Nlpeda:
         # display(self.bigram_df.head(3))
         print("Analysis Completed!, to view whole dataframe type 'obj.bigram_df'")
 
-    def __perform_bigram(self, condition: bool):
+    def _perform_bigram(self, condition: bool):
 
         if condition:
             top_bigram_widget = self.widget.int_slider(
                 minimum=1, maximum=100, step=1, value=10, description="Word Range:")
 
-            interact(self.__bigram_stop_word_interaction, condition=widgets.Checkbox(
+            interact(self._bigram_stop_word_interaction, condition=widgets.Checkbox(
                 description="Include Stop words in analysis"))
 
             widgets.interactive_output(
-                self.__bigram_interaction, {'top_bigram': top_bigram_widget})
+                self._bigram_interaction, {'top_bigram': top_bigram_widget})
 
             display(top_bigram_widget)
 
@@ -368,24 +368,24 @@ class Nlpeda:
                 button_style='info'
             )
 
-            bigram_button.on_click(self.__start_bigram)
+            bigram_button.on_click(self._start_bigram)
             display(bigram_button)
 
     @exception_handler
     def bigram_statistics(self):
         print_in_blue("Bigram Analysis: ")
-        interact(self.__perform_bigram, condition=widgets.Checkbox(
+        interact(self._perform_bigram, condition=widgets.Checkbox(
             description="Perform Bigram"))
 
     # Trigram Analysis
 
-    def __trigram_interaction(self, top_trigram: int) -> None:
+    def _trigram_interaction(self, top_trigram: int) -> None:
         self.top_trigram = top_trigram
 
-    def __trigram_stop_word_interaction(self, condition: bool):
+    def _trigram_stop_word_interaction(self, condition: bool):
         self.trigram_stop_words = condition
 
-    def __start_trigram(self, e):
+    def _start_trigram(self, e):
         print(
             f"Please wait starting Trigram word analysis for getting top {self.top_trigram} words...")
 
@@ -397,16 +397,16 @@ class Nlpeda:
         # display(self.trigram_df.head(3))
         print("Analysis Completed!, to view whole dataframe type 'obj.trigram_df'")
 
-    def __perform_trigram(self, condition: bool):
+    def _perform_trigram(self, condition: bool):
         if condition:
             top_trigram_widget = self.widget.int_slider(
                 minimum=1, maximum=100, step=1, value=10, description="Word Range:")
 
-            interact(self.__trigram_stop_word_interaction, condition=widgets.Checkbox(
+            interact(self._trigram_stop_word_interaction, condition=widgets.Checkbox(
                 description="Include Stop words in analysis"))
 
             widgets.interactive_output(
-                self.__trigram_interaction, {'top_trigram': top_trigram_widget})
+                self._trigram_interaction, {'top_trigram': top_trigram_widget})
 
             display(top_trigram_widget)
 
@@ -416,17 +416,17 @@ class Nlpeda:
                 button_style='info'
             )
 
-            trigram_button.on_click(self.__start_trigram)
+            trigram_button.on_click(self._start_trigram)
             display(trigram_button)
 
     @exception_handler
     def trigram_statistics(self):
         print_in_blue("Trigram Analysis: ")
-        interact(self.__perform_trigram, condition=widgets.Checkbox(
+        interact(self._perform_trigram, condition=widgets.Checkbox(
             description="Perform Trigram"))
 
     @exception_handler
-    def __ngram_plot(self, df):
+    def _ngram_plot(self, df):
         if df == "Unigram":
             plot_df = self.unigram_df.set_index("unigram")
             plot_df.iplot(kind="bar", xTitle="Unigram",
@@ -441,7 +441,7 @@ class Nlpeda:
                           yTitle="Frequence", title="Top Trigram words", dimensions=(1000, 350))
 
     @exception_handler
-    def __perform_ngram(self, condition: bool):
+    def _perform_ngram(self, condition: bool):
         print("To refresh selection, please uncheck and check `Start Plotting` checkbox")
         if condition:
             df = []
@@ -458,7 +458,7 @@ class Nlpeda:
             items = [df_dropdown]
 
             hist_plot_ui = widgets.HBox(items)
-            output = widgets.interactive_output(self.__ngram_plot, {
+            output = widgets.interactive_output(self._ngram_plot, {
                                                 'df': df_dropdown})
 
             display(hist_plot_ui, output)
@@ -466,7 +466,7 @@ class Nlpeda:
     @exception_handler
     def ngram_plot(self):
         print_in_blue("Plot Ngram Plots: ")
-        interact(self.__perform_ngram, condition=widgets.Checkbox(
+        interact(self._perform_ngram, condition=widgets.Checkbox(
             description="Start Plotting"))
 
 
