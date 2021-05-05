@@ -187,7 +187,7 @@ class Nlpeda:
             interact(self._distplot_for_sentiment, condition=widgets.Checkbox(
                 description="Plot Sentiment Distribution"))
 
-    @timer_and_exception_handler
+    @timer
     def basic_eda(self):
         self.print_shape()
 

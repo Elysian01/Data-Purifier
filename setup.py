@@ -1,9 +1,25 @@
+import os
+import codecs
 from setuptools import setup, find_packages
 
 with open('requirements.txt', encoding="utf-8") as f:
     requirements = f.readlines()
 
-# print(requirements)
+
+def read(rel_path):
+    here = os.path.abspath(os.path.dirname(__file__))
+    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
+        return fp.read()
+
+
+def get_version(rel_path):
+    for line in read(rel_path).splitlines():
+        if line.startswith('__version__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    else:
+        raise RuntimeError("Unable to find version string.")
+
 
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
@@ -26,7 +42,7 @@ classifiers = [
 ]
 
 setup(name="data-purifier",
-      version="0.2.0",
+      version=get_version("datapurifier/__init__.py"),
       description="A Python library for Automated Exploratory Data Analysis, Automated Data Cleaning and Automated Data Preprocessing For Machine Learning and Natural Language Processing Applications in Python.",
       url="https://github.com/Elysian01/Data-Purifier",
       long_description=open("PYPI_README.md", encoding='utf-8').read(),

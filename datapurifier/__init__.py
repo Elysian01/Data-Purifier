@@ -17,6 +17,8 @@ from datapurifier.preprocessing.nlpurifier import Nlpurifier
 
 from .dataset import *
 
+__version__ = "0.2.1"
+
 # from datapurifier.preprocessing.contractions import CONTRACTIONS
 
 # from .main import Purify
