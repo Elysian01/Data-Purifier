@@ -16,6 +16,7 @@ Demo Output of Auto EDA
 Table of Contents
 - [Data-Purifier](#data-purifier)
   - [Get Started](#get-started)
+    - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
     - [Automated EDA for NLP](#automated-eda-for-nlp)
     - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
   - [Example:](#example)
@@ -47,7 +48,8 @@ print(dp.get_dataset_names()) # to get all dataset names
 print(dp.get_text_dataset_names()) # to get all text dataset names
 ```
 
-Load an example dataset, pass one of the dataset names from the example list as an argument.```python
+Load an example dataset, pass one of the dataset names from the example list as an argument.
+```python
 df = dp.load_dataset("womens_clothing_e-commerce_reviews")
 ```
 
