@@ -48,7 +48,7 @@
 - [x] Removal of Rare words
 
 - [x] Add inbuild dataset functionality and its access.
-- [ ] Documentation for inbuild dataset, version, cleaning methods functionality
+- [x] Documentation for inbuild dataset, version, cleaning methods functionality
 - [x] dp.__version__ functionality
 
 ## Analysis

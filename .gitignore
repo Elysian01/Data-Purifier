@@ -140,6 +140,7 @@ cython_debug/
 ## Directories
 datapurifier.egg-info
 dist
+docs
 
 ## datasets and files
 twitter16m.csv
