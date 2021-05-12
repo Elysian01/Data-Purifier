@@ -159,9 +159,9 @@ ae
 ```
 
 ## Example: 
-https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing
+[Colab Notebook](https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing)
 
-Documentation: https://cutt.ly/CbFT5Dw
+Official Documentation: https://cutt.ly/CbFT5Dw
 
 Python Package: https://pypi.org/project/data-purifier/
 
