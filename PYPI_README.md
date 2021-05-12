@@ -7,13 +7,12 @@ A Python library for Automated Exploratory Data Analysis, Automated Data Cleanin
 [![Python Version](https://img.shields.io/pypi/pyversions/data-purifier)](https://pypi.org/project/data-purifier/)
 [![PyPi Downloads](https://static.pepy.tech/personalized-badge/data-purifier?period=total&units=international_system&left_color=black&right_color=orange&left_text=Downloads)](https://pepy.tech/project/data-purifier)
 
-
 Table of Contents
 - [Data-Purifier](#data-purifier)
   - [Get Started](#get-started)
-    - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
     - [Automated EDA for NLP](#automated-eda-for-nlp)
     - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
+    - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
   - [Example:](#example)
 
 
@@ -48,26 +47,6 @@ Load an example dataset, pass one of the dataset names from the example list as 
 df = dp.load_dataset("womens_clothing_e-commerce_reviews")
 ```
 
-### Automated EDA for Machine Learning
-
-* It gives shape, number of categorical and numerical features, description of the dataset, and also the information about the number of null values and their respective percentage. 
-
-* For understanding the distribution of datasets and getting useful insights, there are many interactive plots generated where the user can select his desired column and the system will automatically plot it. Plot includes
-   1. Count plot
-   2. Correlation plot
-   3. Joint plot
-   4. Pair plot
-   5. Pie plot 
-
-**Code Implementation**
-
-Load the dataset and let the magic of automated EDA begin
-
-```python
-df = pd.read_csv("./datasets/iris.csv")
-ae = Mleda(df)
-ae
-```
 
 
 ### Automated EDA for NLP
@@ -91,8 +70,8 @@ Later you can also observe distribution of above mentioned analysis just by sele
 * Plots `wordcloud plot`
 * Perform `Unigram, Bigram, and Trigram` analysis, returning the dataframe of each and also showing its respective distribution plot.
 
-
 **Code Implementation**
+
 
 For Automated EDA and Automated Data Cleaning of NL dataset, load the dataset and pass the dataframe along with the targeted column containing textual data.
 
@@ -119,7 +98,7 @@ eda.unigram_df # for seeing unigram datfarame
 
 ### Automated Data Cleaning for NLP
 
-It provides following cleaning techniques, where you have to just tick the checkbox and our system will automatically perform the operation for you.
+* It provides following cleaning techniques, where you have to just tick the checkbox and our system will automatically perform the operation for you.
 
 | Features                                   | Features                              | Features                         |
 | ------------------------------------------ | ------------------------------------- | -------------------------------- |
@@ -152,9 +131,28 @@ pure.df
 ```
 
 
+### Automated EDA for Machine Learning
+
+* It gives shape, number of categorical and numerical features, description of the dataset, and also the information about the number of null values and their respective percentage. 
+
+* For understanding the distribution of datasets and getting useful insights, there are many interactive plots generated where the user can select his desired column and the system will automatically plot it. Plot includes
+   1. Count plot
+   2. Correlation plot
+   3. Joint plot
+   4. Pair plot
+   5. Pie plot 
+
+**Code Implementation**
+
+Load the dataset and let the magic of automated EDA begin
+
+```python
+df = pd.read_csv("./datasets/iris.csv")
+ae = Mleda(df)
+ae
+```
+
 ## Example: 
 https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing
 
-
-
-
+Documentation: https://cutt.ly/CbFT5Dw

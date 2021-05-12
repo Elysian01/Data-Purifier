@@ -16,9 +16,9 @@ Demo Output of Auto EDA
 Table of Contents
 - [Data-Purifier](#data-purifier)
   - [Get Started](#get-started)
-    - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
     - [Automated EDA for NLP](#automated-eda-for-nlp)
     - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
+    - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
   - [Example:](#example)
 
 
@@ -53,26 +53,6 @@ Load an example dataset, pass one of the dataset names from the example list as 
 df = dp.load_dataset("womens_clothing_e-commerce_reviews")
 ```
 
-### Automated EDA for Machine Learning
-
-* It gives shape, number of categorical and numerical features, description of the dataset, and also the information about the number of null values and their respective percentage. 
-
-* For understanding the distribution of datasets and getting useful insights, there are many interactive plots generated where the user can select his desired column and the system will automatically plot it. Plot includes
-   1. Count plot
-   2. Correlation plot
-   3. Joint plot
-   4. Pair plot
-   5. Pie plot 
-
-**Code Implementation**
-
-Load the dataset and let the magic of automated EDA begin
-
-```python
-df = pd.read_csv("./datasets/iris.csv")
-ae = Mleda(df)
-ae
-```
 
 
 ### Automated EDA for NLP
@@ -157,15 +137,31 @@ pure.df
 ```
 
 
+### Automated EDA for Machine Learning
+
+* It gives shape, number of categorical and numerical features, description of the dataset, and also the information about the number of null values and their respective percentage. 
+
+* For understanding the distribution of datasets and getting useful insights, there are many interactive plots generated where the user can select his desired column and the system will automatically plot it. Plot includes
+   1. Count plot
+   2. Correlation plot
+   3. Joint plot
+   4. Pair plot
+   5. Pie plot 
+
+**Code Implementation**
+
+Load the dataset and let the magic of automated EDA begin
+
+```python
+df = pd.read_csv("./datasets/iris.csv")
+ae = Mleda(df)
+ae
+```
+
 ## Example: 
 https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing
 
-
-
-
-
-
-
+Documentation: https://cutt.ly/CbFT5Dw
 
 Python Package: https://pypi.org/project/data-purifier/
 

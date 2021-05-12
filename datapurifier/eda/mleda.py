@@ -38,7 +38,6 @@ class Mleda:
     Parameters
     ----------
     df : Pandas Dataframe
-
     """
 
     def __init__(self, df: pd.DataFrame):
