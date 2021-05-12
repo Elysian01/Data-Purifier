@@ -150,7 +150,7 @@ class Mleda:
             print(colored(
                 "\nCongrats!!, The Dataframe has NO NULL VALUES\n", "green", attrs=["bold"]))
 
-    def _value_counts_plot(self, column: str, n: int) -> None:
+    def _value_counts_plot(self, column, n: int) -> None:
 
         selected_columns = self.df[column].value_counts().index.tolist()[:n]
         selected_columns_count = self.df[column].value_counts().tolist()[:n]
