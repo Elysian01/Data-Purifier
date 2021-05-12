@@ -23,7 +23,7 @@ def get_version(rel_path):
 
 # https://pypi.org/pypi?%3Aaction=list_classifiers
 classifiers = [
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 5 - Production/Stable',
     'Topic :: Software Development :: Libraries :: Python Modules',
     'License :: OSI Approved :: MIT License',
     "Environment :: Console",
