@@ -11,7 +11,7 @@ jinja2>=2.11.1
 numpy>=1.16.0
 
 ipywidgets>=7.6.3
-ipykernel>=5.5.3
+# ipykernel>=5.5.3
 
 
 # Text analysis
