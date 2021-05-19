@@ -9,6 +9,7 @@ A Python library for Automated Exploratory Data Analysis, Automated Data Cleanin
 
 Table of Contents
 - [Data-Purifier](#data-purifier)
+  - [Installation](#installation)
   - [Get Started](#get-started)
     - [Automated EDA for NLP](#automated-eda-for-nlp)
     - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
@@ -16,17 +17,39 @@ Table of Contents
   - [Example:](#example)
 
 
-## Get Started
+## Installation
 
-Install the packages
+**Prerequsites**
 
-```bash
+- [Anaconda](https://docs.anaconda.com/anaconda/install/)
+
+To use Data-purifier, it's recommended to create a new environment, and install the required dependencies:
+
+To install from PyPi:
+
+```sh
+conda create -n <your_env_name> python=3.6 anaconda
+conda activate <your_env_name> # ON WINDOWS: `source activate <your_env_name>`
+
 pip install data-purifier
-```
-
-```bash
 python -m spacy download en_core_web_sm
 ```
+
+To install from source:
+
+```sh
+cd <Data-Purifier_Destination>
+git clone https://github.com/Elysian01/Data-Purifier.git
+# or download and unzip https://github.com/Elysian01/Data-Purifier/archive/master.zip
+conda create -n <your_env_name> python=3.7 anaconda
+conda activate <your_env_name> # ON WINDOWS: `source activate <your_env_name>`
+cd Data-Purifier
+
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+```
+
+## Get Started
 
 Load the module
 ```python
