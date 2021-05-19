@@ -71,4 +71,6 @@ setup(name="data-purifier",
 
 # python setup.py bdist_wheel
 # twine upload dist/*
-# pip install dist/Autoeda-0.0.1-py3-none-any.whl
+
+# or upload specific version
+# twine upload data_purifier-0.2.8-py3-none-any.whl

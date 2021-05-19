@@ -20,7 +20,7 @@ Table of Contents
     - [Automated EDA for NLP](#automated-eda-for-nlp)
     - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
     - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
-  - [Example:](#example)
+  - [Example](#example)
 
 
 ## Installation
@@ -47,7 +47,8 @@ To install from source:
 cd <Data-Purifier_Destination>
 git clone https://github.com/Elysian01/Data-Purifier.git
 # or download and unzip https://github.com/Elysian01/Data-Purifier/archive/master.zip
-conda create -n <your_env_name> python=3.7 anaconda
+
+conda create -n <your_env_name> python=3.6 anaconda
 conda activate <your_env_name> # ON WINDOWS: `source activate <your_env_name>`
 cd Data-Purifier
 
@@ -181,7 +182,7 @@ ae = Mleda(df)
 ae
 ```
 
-## Example: 
+## Example
 [Colab Notebook](https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing)
 
 Official Documentation: https://cutt.ly/CbFT5Dw
