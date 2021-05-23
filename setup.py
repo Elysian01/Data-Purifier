@@ -73,4 +73,4 @@ setup(name="data-purifier",
 # twine upload dist/*
 
 # or upload specific version
-# twine upload data_purifier-0.2.8-py3-none-any.whl
+# twine upload dist/data_purifier-0.2.9-py3-none-any.whl

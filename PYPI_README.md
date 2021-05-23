@@ -42,7 +42,7 @@ cd <Data-Purifier_Destination>
 git clone https://github.com/Elysian01/Data-Purifier.git
 # or download and unzip https://github.com/Elysian01/Data-Purifier/archive/master.zip
 
-conda create -n <your_env_name> python=3.7 anaconda
+conda create -n <your_env_name> python=3.6 anaconda
 conda activate <your_env_name> # ON WINDOWS: `source activate <your_env_name>`
 cd Data-Purifier
 

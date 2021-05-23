@@ -70,6 +70,23 @@
 
 - [ ] Report Generation of Executed Process.
 
+## Automated Data Cleaning
+- [ ] Automated Data Cleaning
+  - [ ] Null/Missing values handling
+  - [ ] Encoding Categorical values
+  - [ ] Splitting dataset into training and test set
+  - [ ] Feature scaling
+
+### Cleaning Reference
+- [javatpoint](https://www.javatpoint.com/data-preprocessing-machine-learning)
+
+## Model Evaluation
+- [ ] Classification Evaluation
+  - [ ] Classification Report
+  - [ ] Confusion Matrix
+- [ ] Regression Evaluation
+  - [ ] MSE, MAE, RMSE
+
 ## Reference
 
 [Towards Data science blog](https://towardsdatascience.com/nlp-part-3-exploratory-data-analysis-of-text-data-1caa8ab3f79d)
@@ -99,26 +116,6 @@
       - [ ] Missing Value Imputation
       - [ ] Numerical Value Imputation
       - [ ] IterativeImputer
-
-  - [ ] Feature Scaling Techniques
-      - [ ] Standard Scaler
-      - [ ] MinMax
-      - [ ] Robust 
-      - [ ] Log Transformation
-      - [ ] Quantile Transformer Scaler
-      - [ ] MaxAbsScaler
-      - [ ] Unit Vector Scaler/Normalizer
-      - [ ] Power Transformer Scaler
-
-  - [ ] Encoding Techniques
-      - [ ] Label 
-      - [ ] One hot
-      - [ ] Dummy 
-      - [ ] Effect 
-      - [ ] Binary 
-      - [ ] BaseN 
-      - [ ] Hash 
-      - [ ] Target 
   
 - [ ] Deep Learning
   
