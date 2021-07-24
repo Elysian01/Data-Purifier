@@ -16,6 +16,7 @@ from datapurifier.preprocessing.mlpurifier import Mlpurifier
 from datapurifier.preprocessing.nlpurifier import Nlpurifier
 
 from .dataset import *
+from .report import MlReport
 
 __version__ = "0.2.9"
 
