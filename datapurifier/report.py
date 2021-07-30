@@ -19,7 +19,7 @@ report_details = [
 
 class MlReport:
     
-    def __init__(self, df: pd.DataFrame, target_column:str, includes = ["null_info", "uniqueness_info"], verbose = True):
+    def __init__(self, df: pd.DataFrame, target_column:str = None, includes = ["null_info", "uniqueness_info"], verbose = True):
         
         self.df = df
         self.target_column = target_column
@@ -46,7 +46,7 @@ class MlReport:
                 print("You can access this dataframe by typing '<report_obj>.unique_df'")
                 print("To drop column with particular or minimum threshold use 'mlutils.drop_column_based_on_uniqueness_threshold(df, threshold=0)'")
             print()
-        # Percentage distribution of target column => only useful for classification and clustering dataset
+            
         
         
         # Description of dataset

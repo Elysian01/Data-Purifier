@@ -7,6 +7,8 @@ A Python library for Automated Exploratory Data Analysis, Automated Data Cleanin
 [![Python Version](https://img.shields.io/pypi/pyversions/data-purifier)](https://pypi.org/project/data-purifier/)
 [![PyPi Downloads](https://static.pepy.tech/personalized-badge/data-purifier?period=total&units=international_system&left_color=black&right_color=orange&left_text=Downloads)](https://pepy.tech/project/data-purifier)
 
+
+
 Table of Contents
 - [Data-Purifier](#data-purifier)
   - [Installation](#installation)
@@ -14,6 +16,7 @@ Table of Contents
     - [Automated EDA for NLP](#automated-eda-for-nlp)
     - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
     - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
+    - [Automated Report Generation for Machine Learning](#automated-report-generation-for-machine-learning)
   - [Example](#example)
 
 
@@ -55,7 +58,7 @@ python -m spacy download en_core_web_sm
 Load the module
 ```python
 import datapurifier as dp
-from datapurifier import Mleda, Nleda, Nlpurifier
+from datapurifier import Mleda, Nleda, Nlpurifier, MlReport
 
 print(dp.__version__)
 ```
@@ -175,6 +178,16 @@ df = pd.read_csv("./datasets/iris.csv")
 ae = Mleda(df)
 ae
 ```
+
+### Automated Report Generation for Machine Learning
+
+Report contains sample of data, shape, number of numerical and categorical features, data uniqueness information, description of data, and null information.
+
+```python
+df = pd.read_csv("./datasets/iris.csv")
+report = MlReport(df)
+```
+
 
 ## Example
 [Colab Notebook](https://colab.research.google.com/drive/1J932G1uzqxUHCMwk2gtbuMQohYZsze8U?usp=sharing)

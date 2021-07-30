@@ -203,9 +203,7 @@ class Nlpeda:
         # Stop Words Count
         self.df["stop_words_counts"] = self.df[self.target].apply(lambda x: len(
             [word for word in x.split() if word in STOP_WORDS]))
-        # Uppercase Word Count
-        self.df["upper_case_word_counts"] = self.df[self.target].apply(lambda x: len(
-            [word for word in x if word.isupper() and len(x) > 3]))
+        
 
         display(self.df.head())
 
