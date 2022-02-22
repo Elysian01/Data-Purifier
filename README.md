@@ -83,6 +83,8 @@ df = dp.load_dataset("womens_clothing_e-commerce_reviews")
 
 [![Data-Purifier Tutorial](https://img.youtube.com/vi/gDI6m1foHD8/0.jpg)](https://www.youtube.com/watch?v=gDI6m1foHD8)
 
+[Automated NLP Pre-Processing using Data-Purifier Library Blog](https://medium.com/@abhig0209/automated-nlp-pre-processing-using-data-purifier-library-183678fabc8e)
+
 
 ### Automated EDA for NLP
 
