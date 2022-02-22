@@ -79,7 +79,7 @@ Load an example dataset, pass one of the dataset names from the example list as 
 df = dp.load_dataset("womens_clothing_e-commerce_reviews")
 ```
 
-### Tutorial
+### [Tutorial](https://youtu.be/gDI6m1foHD8)
 
 [![Data-Purifier Tutorial](https://img.youtube.com/vi/gDI6m1foHD8/0.jpg)](https://www.youtube.com/watch?v=gDI6m1foHD8)
 
