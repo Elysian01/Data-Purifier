@@ -24,10 +24,18 @@ from datapurifier.utils import *
 ps = PorterStemmer()
 
 
-def NLAutoPurifier(df: pd.DataFrame, target: str):
+def _auto_detect_noise_in_textual_data():
+    """Auto-Detection, of emojis, links, emails, and accented characters"""
+    pass
+
+
+def NLAutoPurifier(df: pd.DataFrame, target: str, representation=None):
     """
-    Automatically Pre-process text-data by the following pipeline.
-    Default pipeline:
+    1. Automatically Pre-process text-data by pipeline.
+    2. Auto-Detection, of emojis, links, emails, and accented characters
+    3. Represent words into their vector format
+
+    Default pipeline for step-1:
     1. :meth:`datapurifier.Nlpurifier.drop_null_rows`
     2. :meth:`datapurifier.Nlpurifier.lower`
     3. :meth:`datapurifier.Nlpurifier.remove_numbers`
@@ -47,6 +55,8 @@ def NLAutoPurifier(df: pd.DataFrame, target: str):
     print_in_blue(
         f"Dataframe contains {df.shape[0]} rows and {df.shape[1]} columns\n")
 
+    detect = _auto_detect_noise_in_textual_data()
+
     purifier = Nlpurifier(df, target, show_widgets=False)
     purifier.drop_null_rows()
     purifier.lower()
@@ -56,6 +66,14 @@ def NLAutoPurifier(df: pd.DataFrame, target: str):
     purifier.remove_accented_chars()
     purifier.remove_stop_words()
     purifier.remove_multiple_spaces()
+
+    if representation:
+        if representation == "tfidf":
+            pass
+        elif representation == "tf":
+            pass
+        elif representation == "bow":
+            pass
 
     print(colored("\nPurifying Completed!\n", "green", attrs=["bold"]))
     return purifier.df
