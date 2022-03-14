@@ -16,6 +16,7 @@ Demo Output of Auto EDA
 Table of Contents
 - [Data-Purifier](#data-purifier)
   - [Installation](#installation)
+  - [Tutorial](#tutorial)
   - [Get Started](#get-started)
     - [Automated EDA for NLP](#automated-eda-for-nlp)
     - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
@@ -62,7 +63,7 @@ python -m spacy download en_core_web_sm
 Load the module
 ```python
 import datapurifier as dp
-from datapurifier import Mleda, Nleda, Nlpurifier, MlReport
+from datapurifier import Mleda, Nlpeda, Nlpurifier, MlReport
 
 print(dp.__version__)
 ```
@@ -78,6 +79,11 @@ Load an example dataset, pass one of the dataset names from the example list as 
 df = dp.load_dataset("womens_clothing_e-commerce_reviews")
 ```
 
+### [Tutorial](https://youtu.be/gDI6m1foHD8)
+
+[![Data-Purifier Tutorial](https://img.youtube.com/vi/gDI6m1foHD8/0.jpg)](https://www.youtube.com/watch?v=gDI6m1foHD8)
+
+[Automated NLP Pre-Processing using Data-Purifier Library Blog](https://medium.com/@abhig0209/automated-nlp-pre-processing-using-data-purifier-library-183678fabc8e)
 
 
 ### Automated EDA for NLP
