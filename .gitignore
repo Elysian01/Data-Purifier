@@ -141,6 +141,7 @@ cython_debug/
 datapurifier.egg-info
 dist
 docs
+scripts_and_tests
 
 ## datasets and files
 twitter16m.csv
@@ -150,3 +151,8 @@ notes.txt
 __pycache__
 .vscode
 .ipynb_checkpoints
+
+## Test Files
+NLpurifier-NLAutoPurifier-Testing.ipynb
+
+

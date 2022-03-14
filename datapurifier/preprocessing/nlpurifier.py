@@ -24,17 +24,56 @@ from datapurifier.utils import *
 ps = PorterStemmer()
 
 
+def NLAutoPurifier(df: pd.DataFrame, target: str):
+    """
+    Automatically Pre-process text-data by the following pipeline.
+    Default pipeline:
+    1. :meth:`datapurifier.Nlpurifier.drop_null_rows`
+    2. :meth:`datapurifier.Nlpurifier.lower`
+    3. :meth:`datapurifier.Nlpurifier.remove_numbers`
+    4. :meth:`datapurifier.Nlpurifier.remove_html_tags`
+    5. :meth:`datapurifier.Nlpurifier.remove_special_and_punctions`
+    6. :meth:`datapurifier.Nlpurifier.remove_accented_chars` # instead of removing accented characters convert it
+    7. :meth:`datapurifier.Nlpurifier.remove_stop_words`
+    8. :meth:`datapurifier.Nlpurifier.remove_multiple_spaces`
+
+    Args:
+        df (str): text dataframe
+        target (str): target column in the dataframe which you have to clean up
+
+    Returns: Cleaned Data-Frame           
+    """
+
+    print_in_blue(
+        f"Dataframe contains {df.shape[0]} rows and {df.shape[1]} columns\n")
+
+    purifier = Nlpurifier(df, target, show_widgets=False)
+    purifier.drop_null_rows()
+    purifier.lower()
+    purifier.remove_numbers()
+    purifier.remove_html_tags()
+    purifier.remove_special_and_punctions()
+    purifier.remove_accented_chars()
+    purifier.remove_stop_words()
+    purifier.remove_multiple_spaces()
+
+    print(colored("\nPurifying Completed!\n", "green", attrs=["bold"]))
+    return purifier.df
+
+
 class Nlpurifier:
 
-    def __init__(self: str, df: pd.DataFrame, target: str, spacy_model="en_core_web_sm"):
+    def __init__(self: str, df: pd.DataFrame, target: str, spacy_model="en_core_web_sm", show_widgets=True):
         self._set_df_and_target(df, target)
         self.spacy_model = spacy_model
         self.nlp = spacy.load(spacy_model)
-        self.widget = Widgets()
 
-        self.purifier_widgets = {}
-        self.word_count_series = pd.Series()
-        self._show_widgets()
+        if show_widgets:
+            self.widget = Widgets()
+
+            self.purifier_widgets = {}
+            self.word_count_series = pd.Series()
+            self._show_widgets()
 
     def _start_purifying(self, e):
 

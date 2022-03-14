@@ -14,6 +14,7 @@ from datapurifier.eda.mleda import Mleda
 from datapurifier.eda.nlpeda import Nlpeda
 from datapurifier.preprocessing.mlpurifier import Mlpurifier
 from datapurifier.preprocessing.nlpurifier import Nlpurifier
+from datapurifier.preprocessing.nlpurifier import NLAutoPurifier
 
 from .dataset import *
 from .report import MlReport
