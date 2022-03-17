@@ -1,6 +1,7 @@
 import re
 import sys
 import spacy
+import unidecode
 import unicodedata
 import numpy as np
 import pandas as pd
@@ -40,8 +41,8 @@ def NLAutoPurifier(df: pd.DataFrame, target: str, representation=None):
     2. :meth:`datapurifier.Nlpurifier.lower`
     3. :meth:`datapurifier.Nlpurifier.remove_numbers`
     4. :meth:`datapurifier.Nlpurifier.remove_html_tags`
-    5. :meth:`datapurifier.Nlpurifier.remove_special_and_punctions`
-    6. :meth:`datapurifier.Nlpurifier.remove_accented_chars` # instead of removing accented characters convert it
+    5. :meth:`datapurifier.Nlpurifier.convert_accented_chars_to_normal`
+    6. :meth:`datapurifier.Nlpurifier.remove_special_and_punctions`
     7. :meth:`datapurifier.Nlpurifier.remove_stop_words`
     8. :meth:`datapurifier.Nlpurifier.remove_multiple_spaces`
 
@@ -62,8 +63,9 @@ def NLAutoPurifier(df: pd.DataFrame, target: str, representation=None):
     purifier.lower()
     purifier.remove_numbers()
     purifier.remove_html_tags()
+    # purifier.remove_accented_chars()
+    purifier.convert_accented_chars_to_normal()
     purifier.remove_special_and_punctions()
-    purifier.remove_accented_chars()
     purifier.remove_stop_words()
     purifier.remove_multiple_spaces()
 
@@ -438,6 +440,11 @@ class Nlpurifier:
     def remove_urls(self):
         self.df[self.target] = self.df[self.target].apply(lambda x: re.sub(
             r'(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?', "", x))
+
+    @timer
+    def convert_accented_chars_to_normal(self):
+        self.df[self.target] = self.df[self.target].apply(
+            lambda x: unidecode.unidecode(x))
 
     @timer
     def get_word_count(self):

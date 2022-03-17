@@ -14,7 +14,7 @@ Table of Contents
   - [Installation](#installation)
   - [Get Started](#get-started)
     - [Automated EDA for NLP](#automated-eda-for-nlp)
-    - [Automated Data Cleaning for NLP](#automated-data-cleaning-for-nlp)
+    - [Automated Data Preprocessing for NLP](#automated-data-preprocessing-for-nlp)
     - [Automated EDA for Machine Learning](#automated-eda-for-machine-learning)
     - [Automated Report Generation for Machine Learning](#automated-report-generation-for-machine-learning)
   - [Example](#example)
@@ -123,7 +123,26 @@ eda.unigram_df # for seeing unigram datfarame
 ```
 
 
-### Automated Data Cleaning for NLP
+### Automated Data Preprocessing for NLP
+
+* In automated data preprocessing, it goes through the following pipeline, and return the cleaned data-frame
+    1. Drop Null Rows
+    2. Convert everything to lowercase 
+    3. Remove digits/numbers
+    4. Remove html tags
+    5. Convert accented chars to normal letters
+    6. Remove special and punctions
+    7. Remove stop words
+    8. Remove multiple spaces
+
+**Code Implementation**
+
+Pass in the dataframe with the name of the column which you have to clean
+```python
+cleaned_df = NLAutoPurifier(df, target = "tweets")
+```
+   
+**Widget Based Data Preprocessing**
 
 * It provides following cleaning techniques, where you have to just tick the checkbox and our system will automatically perform the operation for you.
 
