@@ -128,12 +128,12 @@ eda.unigram_df # for seeing unigram datfarame
 * In automated data preprocessing, it goes through the following pipeline, and return the cleaned data-frame
     1. Drop Null Rows
     2. Convert everything to lowercase 
-    3. Remove digits/numbers
-    4. Remove html tags
+    3. Removes digits/numbers
+    4. Removes html tags
     5. Convert accented chars to normal letters
-    6. Remove special and punctions
-    7. Remove stop words
-    8. Remove multiple spaces
+    6. Removes special and punctuation characters
+    7. Removes stop words
+    8. Removes multiple spaces
 
 **Code Implementation**
 

@@ -42,7 +42,7 @@ def NLAutoPurifier(df: pd.DataFrame, target: str, representation=None):
     3. :meth:`datapurifier.Nlpurifier.remove_numbers`
     4. :meth:`datapurifier.Nlpurifier.remove_html_tags`
     5. :meth:`datapurifier.Nlpurifier.convert_accented_chars_to_normal`
-    6. :meth:`datapurifier.Nlpurifier.remove_special_and_punctions`
+    6. :meth:`datapurifier.Nlpurifier.remove_punctuations`
     7. :meth:`datapurifier.Nlpurifier.remove_stop_words`
     8. :meth:`datapurifier.Nlpurifier.remove_multiple_spaces`
 
@@ -65,7 +65,7 @@ def NLAutoPurifier(df: pd.DataFrame, target: str, representation=None):
     purifier.remove_html_tags()
     # purifier.remove_accented_chars()
     purifier.convert_accented_chars_to_normal()
-    purifier.remove_special_and_punctions()
+    purifier.remove_punctuations()
     purifier.remove_stop_words()
     purifier.remove_multiple_spaces()
 
@@ -174,7 +174,7 @@ class Nlpurifier:
                 self.remove_emoticons()
 
         if self.purifier_widgets["remove_special_and_punct"]:
-            self.remove_special_and_punctions()
+            self.remove_punctuations()
 
         if self.purifier_widgets["root_word_technique"]:
             technique = self.purifier_widgets["root_word_technique"]
@@ -377,7 +377,7 @@ class Nlpurifier:
             lambda x: re.sub(r'[0-9]', '', x))
 
     @timer
-    def remove_special_and_punctions(self):
+    def remove_punctuations(self):
         self.df[self.target] = self.df[self.target].apply(
             lambda x: re.sub('[^A-Z a-z 0-9-]+', "", x))
 
