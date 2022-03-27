@@ -39,7 +39,7 @@ def conditional_timer(function):
                 return value
         except Exception as e:
             print(
-                colored(f"Error in execution of {function.__name__!r}:\n" + e, "red", attrs=["bold"]))
+                colored(f"Error in execution of {function.__name__!r}:\n" + str(e), "red", attrs=["bold"]))
     return wrapper_timer
 
 
@@ -52,5 +52,5 @@ def exception_handler(function):
             return value
         except Exception as e:
             print(
-                colored(f"Error in execution of {function.__name__!r}:\n" + e, "red", attrs=["bold"]))
+                colored(f"Error in execution of {function.__name__!r}:\n" + str(e), "red", attrs=["bold"]))
     return wrapper_timer
