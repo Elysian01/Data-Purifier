@@ -19,7 +19,7 @@ from datapurifier.preprocessing.nlpurifier import NLAutoPurifier
 from .dataset import *
 from .report import MlReport
 
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 
 # from datapurifier.preprocessing.contractions import CONTRACTIONS
 
