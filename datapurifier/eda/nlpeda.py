@@ -203,7 +203,6 @@ class Nlpeda:
         # Stop Words Count
         self.df["stop_words_counts"] = self.df[self.target].apply(lambda x: len(
             [word for word in x.split() if word in STOP_WORDS]))
-        
 
         display(self.df.head())
 
@@ -253,7 +252,7 @@ class Nlpeda:
     def _perform_wordcloud_visualization(self, condition):
         if condition:
             print("Please wait plotting wordcloud...")
-            wc = WordCloud(width=1000, height=400).generate(self.text)
+            wc = WordCloud(width=1000, height=400).generate(str(self.text))
             plt.axis("off")
             plt.imshow(wc)
 
