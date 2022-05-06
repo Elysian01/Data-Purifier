@@ -63,7 +63,7 @@ python -m spacy download en_core_web_sm
 Load the module
 ```python
 import datapurifier as dp
-from datapurifier import Mleda, Nlpeda, Nlpurifier, MlReport
+from datapurifier import Mleda, Nlpeda, Nlpurifier, NLAutoPurifier
 
 print(dp.__version__)
 ```
