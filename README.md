@@ -133,7 +133,7 @@ eda.unigram_df # for seeing unigram datfarame
 ```
 
 
-### Automated Data Preprocessing for NLP
+### **Automated Data Preprocessing for NLP**
 
 * In automated data preprocessing, it goes through the following pipeline, and return the cleaned data-frame
     1. Drop Null Rows
@@ -152,7 +152,7 @@ Pass in the dataframe with the name of the column which you have to clean
 cleaned_df = NLAutoPurifier(df, target = "tweets")
 ```
    
-**Widget Based Data Preprocessing**
+### **Widget Based Automated Data Preprocessing for NLP**
 
 * Here you can choose the preprocessing method from the GUI
 
